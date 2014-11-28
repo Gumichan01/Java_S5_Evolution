@@ -1,10 +1,8 @@
 package Main;
 
-import java.awt.Rectangle;
+import Modele.Univers;
 
-import Modele.Entite;
-import Modele.Herbe;
-import Modele.Matiere;
+
 
 /**
  * La classe où tout commence 
@@ -24,7 +22,11 @@ public class Main {
 	public static void main(String[] args) throws Exception{
 		// TODO Auto-generated method stub
 
+		Univers u = new Univers(10, 10, 1, 1);
 		
+		//System.out.println(u.toString());
+		
+		u.evoluer();
 		
 		
 		

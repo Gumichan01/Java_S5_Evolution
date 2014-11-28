@@ -1,15 +1,19 @@
 package Modele;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.LinkedList;
+//import java.util.LinkedList;
 
+import ExceptionUnivers.DimensionNonValideException;
+import ExceptionUnivers.RectangleNonValideException;
+import ExceptionUnivers.SymboleInvalideException;
 import ExceptionUnivers.ValeurNegativeException;
 
 /**
- * La classe Univers représente le modéle principal dans le jeu
- * Il contient les différents entités
+ * La classe Univers représente le modèle principal dans le jeu
+ * Il contient les différentes entités
  * 
- * Cette univers va écvoluer au fur et à mesure de l'éta des entités cibles
+ * Cette univers va évoluer au fur et à mesure de l'état des entités cibles
  * 
  * @author Luxon JEAN-PIERRE & Kahina RAHANI
  * 
@@ -28,13 +32,13 @@ public class Univers {
 	ArrayList<Matiere> matieres;	// La liste de matières qui évolueront (SelMineral, Animuax,...)
 	
 	public Univers(int l, int h, int nbMouton, int nbLoup) 
-		throws ValeurNegativeException{
+		throws ValeurNegativeException, DimensionNonValideException{
 		
 		if(l < 0)
-			throw new ValeurNegativeException("Largeur invalide : "+l+" !");
+			throw new DimensionNonValideException("Largeur invalide : "+l+" !");
 		
 		if(h < 0)
-			throw new ValeurNegativeException("Hauteur invalide : "+h+" !");
+			throw new DimensionNonValideException("Hauteur invalide : "+h+" !");
 
 		if(nbMouton < 0 || nbLoup < 0)
 			throw new ValeurNegativeException("Nombre d'animaux invalide !");
@@ -67,7 +71,7 @@ public class Univers {
 		
 		
 		// On place les moutons
-		for(int i = 1; i< nbMouton;i++){
+		for(int i = 1; i<= nbMouton;i++){
 			
 			do{
 			
@@ -77,11 +81,17 @@ public class Univers {
 			}while(plateau[xAlea][yAlea] != null);
 			
 			// Ajout de la nouvelle instance de l'animal dans l'ArrayList
+			try {
+				this.ajouter(new Mouton(new Rectangle(xAlea, yAlea, 1, 1), "M", 50, Sexe.Femelle, 5));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				}
 			
 		}
 
 		// On place les loups
-		for(int i = 1; i< nbLoup;i++){
+		for(int i = 1; i <= nbLoup;i++){
 			
 			do{
 			
@@ -91,14 +101,19 @@ public class Univers {
 			}while(plateau[xAlea][yAlea] != null);
 			
 			// Ajout de la nouvelle instance de l'animal dans l'ArrayList
-			
+			try {
+				this.ajouter(new Loup(new Rectangle(xAlea, yAlea, 1, 1),"L", 60, Sexe.Femelle, 10));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		
 	}
 	
 
-	private void ajouter(Matiere m){
+	public void ajouter(Matiere m){
 		
 		if(m == null)
 			throw new NullPointerException("Matiere null à ajouter non valide\n");
@@ -106,7 +121,7 @@ public class Univers {
 		matieres.add(m);
 	}
 	
-	private Matiere enlever(Matiere m){
+	public Matiere enlever(Matiere m){
 		
 		int index = matieres.indexOf(m);
 
@@ -119,19 +134,68 @@ public class Univers {
 		
 		while(matieres.size() != 0){
 			
-			try{
-			
+			try{	// On laisse s'écouler 1 seconde entre chaque tour
+					// On le baissera sans doute à 500 millisecondes pour un grand nombre d'éléments
 				Thread.sleep(1000);
 			
 			}catch(InterruptedException e){
 				
 			}
 			
+			// Pour chaque matière dans la liste des matières, les faire évoluer [appel de seDeplacer()]
+			// Ensuite, prévenir la vue du changement d'état pour la synchronisation 
 			
+			for(int i = 0;i < matieres.size();i++){
+				
+				matieres.get(i).evoluerDans(this.plateau, this.herbes);
+			}
 			
+			System.out.println(this.toString());
+			
+			this.supprimerMorts();	// On supprime les morts
+			
+			tour++;
 		}
 	}
 	
+	private void supprimerMorts(){
+		
+		for(int i = 0; i < this.matieres.size();i++){
+			if(!this.matieres.get(i).estVivant()){
+				
+				this.matieres.remove(i);
+				i--;
+			}
+		}
+	}
+	
+	
+	public int getLargeur(){
+		
+		return largeur;
+	}
+	
+	public int getHauteur(){
+		
+		return hauteur;
+	}
+	
+	public ArrayList<Matiere> getMatieres(){
+		
+		return matieres;
+	}
+	
+	public boolean [][] getHerbes(){
+		
+		return herbes;
+	}
+	
+	@Override
+	public String toString(){
+		
+		return "Univers - dimension(l,h) : ("+largeur+","+hauteur+")"
+				+" Tour numéro : "+tour+"; Nombre d'éléments au total :  "+matieres.size();
+	}
 }
 
 

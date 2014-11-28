@@ -39,8 +39,8 @@ public class Entite {
 	}
 	
 	/**
-	 *  Construit aussi l'entité
-	 * @param r Le rectangle voir @class Rectangle
+	 * Construit aussi l'entité
+	 * @param r Le rectangle voir {@link Rectangle}
 	 * @param s le symbole représentative de l'entité (pour l'affichage console)
 	 * @throws SymboleInvalideException Si le symbole vaut null
 	 * @throws RectangleNonValideException Si lerectangle vaut null
@@ -49,7 +49,7 @@ public class Entite {
 
 		if(s == null)
 			throw new SymboleInvalideException("Erreur, symbole invalide (null)");
-		else if( r == null || r.x < 0 || r.y < 0 || r.width <0 || r.height <0 )
+		else if( r == null || r.x < 0 || r.y < 0 || r.width <= 0 || r.height <= 0 )
 			throw new RectangleNonValideException("Je ne peux pas recevoir un rectangle null \n"
 					+"ou bien un rectangle dont les informations sont invalides");
 		

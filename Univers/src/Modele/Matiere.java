@@ -53,9 +53,13 @@ public abstract class Matiere extends Entite /*implements Observable_*/ {
 	}
 
 
-	public abstract void evoluer();	// Kahina -  C'est dans cette méthode que sera appelé seDeplacer() dans Animal 
+	public abstract void evoluerDans(Matiere [][] env, boolean [][] herbes); 
 	
-
+	public boolean estVivant(){
+		
+		return true;
+	}
+	
 	public String toString(){
 		
 		return"| Durée de vie : "+duree_vie+" "+super.toString();
