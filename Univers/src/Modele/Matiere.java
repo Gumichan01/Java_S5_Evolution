@@ -22,7 +22,7 @@ import ExceptionUnivers.ValeurNegativeException;
  */
 public abstract class Matiere extends Entite /*implements Observable_*/ {
 
-	// TODO implemants Observable
+	// TODO implements Observable
 	
 	//protected ArrayList<Observateur> observateurs;
 	protected int duree_vie;
@@ -55,7 +55,7 @@ public abstract class Matiere extends Entite /*implements Observable_*/ {
 
 	public abstract void evoluerDans(Matiere [][] env, boolean [][] herbes); 
 	
-	public boolean estVivant(){
+	public boolean vivant(){
 		
 		return true;
 	}

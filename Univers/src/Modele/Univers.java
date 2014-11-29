@@ -43,10 +43,10 @@ public class Univers {
 		if(nbMouton < 0 || nbLoup < 0)
 			throw new ValeurNegativeException("Nombre d'animaux invalide !");
 		
+		// TODO Luxon - Traiter le cas où on a trop d'animaux par rapport à la taille du plateau
 		if((nbMouton + nbLoup) > (l*h))
 			throw new UnsupportedOperationException("TODO : Operation non supporté, traier le cas où on a trop d'animaux");
 			
-		// TODO Luxon - Traiter le cas où on a trop d'animaux par rapport à la taille du plateau
 		
 		this.largeur = l;
 		this.hauteur = h;
@@ -54,12 +54,12 @@ public class Univers {
 		plateau = new Matiere[largeur][hauteur];
 		herbes = new boolean[largeur][hauteur];
 
-		matieres = new ArrayList<Matiere>((this.largeur*this.hauteur)+1);	// La liste aura de base une capacité  = taille totale du plateau + 1
+		matieres = new ArrayList<Matiere>();
+		matieres.ensureCapacity((this.largeur*this.hauteur)+1); // On définit une capacité min = (taille totale du plateau + 1)
 		
 		// Position aléatoire
 		int xAlea;
 		int yAlea;
-		
 		
 		for(int i = 0;i < this.largeur; i++ ){
 			
@@ -71,20 +71,24 @@ public class Univers {
 		
 		
 		// On place les moutons
-		for(int i = 1; i<= nbMouton;i++){
+		for(int i = 1; i <= nbMouton;i++){
 			
 			do{
 			
-			xAlea = (int)(Math.random()%this.largeur);
-			yAlea = (int)(Math.random()%this.hauteur);
+			xAlea = (int)(Math.random()*this.largeur);
+			yAlea = (int)(Math.random()*this.hauteur);
 				
 			}while(plateau[xAlea][yAlea] != null);
 			
+			
 			// Ajout de la nouvelle instance de l'animal dans l'ArrayList
 			try {
-				this.ajouter(new Mouton(new Rectangle(xAlea, yAlea, 1, 1), "M", 50, Sexe.Femelle, 5));
+				
+				this.ajouter(new Mouton(new Rectangle(xAlea, yAlea, 1, 1), "M", 50, Sexe.Femelle, 5)); 
+				this.plateau[xAlea][yAlea] = this.matieres.get(this.matieres.size() - 1);
+
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+
 				e.printStackTrace();
 				}
 			
@@ -95,16 +99,19 @@ public class Univers {
 			
 			do{
 			
-			xAlea = (int)(Math.random()%this.largeur);
-			yAlea = (int)(Math.random()%this.hauteur);
-				
+			xAlea = (int)(Math.random()*this.largeur);
+			yAlea = (int)(Math.random()*this.hauteur);
+
 			}while(plateau[xAlea][yAlea] != null);
-			
+
 			// Ajout de la nouvelle instance de l'animal dans l'ArrayList
 			try {
+				
 				this.ajouter(new Loup(new Rectangle(xAlea, yAlea, 1, 1),"L", 60, Sexe.Femelle, 10));
+				this.plateau[xAlea][yAlea] = this.matieres.get(this.matieres.size() - 1);
+				
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+
 				e.printStackTrace();
 			}
 		}
@@ -141,30 +148,36 @@ public class Univers {
 			}catch(InterruptedException e){
 				
 			}
+
+			tour++;	
 			
-			// Pour chaque matière dans la liste des matières, les faire évoluer [appel de seDeplacer()]
-			// Ensuite, prévenir la vue du changement d'état pour la synchronisation 
+			// TODO prévenir la vue du changement d'état pour la synchronisation 
 			
 			for(int i = 0;i < matieres.size();i++){
 				
 				matieres.get(i).evoluerDans(this.plateau, this.herbes);
 			}
 			
-			System.out.println(this.toString());
+			if(Debug.DEBUG_UNIVERS)
+				System.out.println(this.toString());
 			
 			this.supprimerMorts();	// On supprime les morts
 			
-			tour++;
+			// TODO tester si une case se libère, pour mettre les animaux en trop
+			
+			// Appel de la vue (l'observateur)
 		}
 	}
 	
 	private void supprimerMorts(){
 		
 		for(int i = 0; i < this.matieres.size();i++){
-			if(!this.matieres.get(i).estVivant()){
+			if(!this.matieres.get(i).vivant()){
 				
-				this.matieres.remove(i);
-				i--;
+				// On met lemplacement du mort à null
+				plateau[this.matieres.get(i).getRect().x][this.matieres.get(i).getRect().y] = null;
+				this.matieres.remove(i);	// On le supprime
+				i--;	// On décrémente i à cause du décalage vers la gauche
 			}
 		}
 	}

@@ -40,9 +40,13 @@ public class Loup extends Animal implements MangeurMouton{
 	@Override
 	public void evoluerDans(Matiere [][] env, boolean [][] herbes) {
 		
-		// TODO faire teste présence mouton sur une case adjacente
-		//evoluerDans(env);
-		super.evoluerDans(env,null);
+		if(this.estVivant){
+
+			// TODO faire teste présence mouton sur une case adjacente, manger le mouton si possible, sino se deplacer
+			super.evoluerDans(env,null);
+			grandir();
+		}
+
 	}
 	
 	/*public void evoluerDans(Matiere [][] env){

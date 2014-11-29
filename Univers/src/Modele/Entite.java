@@ -58,6 +58,11 @@ public class Entite {
 	}
 	
 	
+	public Rectangle getRect(){
+		
+		return new Rectangle(this.rect);
+	}
+	
 	@Override
 	public String toString(){
 		

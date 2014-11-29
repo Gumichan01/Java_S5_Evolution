@@ -24,10 +24,14 @@ public class Mouton extends Animal{
 	@Override
 	public void evoluerDans(Matiere [][] env, boolean [][] herbes){
 		
-		super.evoluerDans(env, herbes);
+		if(this.estVivant){
+					
+			// TODO faire teste si l'herbe est présent, si oui, manger. Sinon, se deplacer
+			super.evoluerDans(env, herbes);
+			grandir();
+		}
 		
-		// TODO faire teste si l'herbe est présent puis le manger
-		
+
 	}
 
 }

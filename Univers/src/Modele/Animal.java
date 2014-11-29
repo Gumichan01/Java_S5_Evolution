@@ -32,7 +32,7 @@ public abstract class Animal extends Matiere{
 		this.duree_survie = duree_survie;
 		this.compt_survie = 0;
 		
-		this.estVivant = false;
+		this.estVivant = true;
 		this.age = 0;
 		this.meurtVieillesse = false;
 		this.meurtMange = false;
@@ -41,45 +41,11 @@ public abstract class Animal extends Matiere{
 		this.sexe = sexe;
 		
 	}
-
-
 	
 	public abstract Animal seReproduire(Animal partenaire);
 	
-	@Override
-	public void evoluerDans(Matiere [][] env, boolean [][] herbes) {
-		// TODO Auto-generated method stub
-		
-		int n = (int)(Math.random()*8 + 1);
-		
-		switch(n){
-		
-			case 1 : 	deplacer(-1, -1,env);
-						break;
-		
-			case 2 : 	deplacer(0, -1,env);
-						break;				
-					
-			case 3 : 	deplacer(1, -1,env);
-						break;
-		
-			case 4 :	deplacer(1, 0,env);
-						break;
-
-			case 5 : 	deplacer(1, 1,env);
-						break;				
-					
-			case 6 : 	deplacer(0, 1,env);
-						break;
-						
-			case 7 : 	deplacer(-1, 1,env);
-						break;
-
-			case 8 :	deplacer(-1, 0,env);
-						break;
-						
-			default : break;
-		}
+	
+	protected void grandir(){
 		
 		// Si on depasse l'esperance de vie
 		if(age > duree_vie){	
@@ -108,6 +74,44 @@ public abstract class Animal extends Matiere{
 		
 	}
 	
+	
+	@Override
+	public void evoluerDans(Matiere [][] env, boolean [][] herbes) {
+		
+		int n = (int)(Math.random()*8 + 1);
+		
+		switch(n){
+		
+			case 1 : 	seDeplacer(-1, -1,env);
+						break;
+		
+			case 2 : 	seDeplacer(0, -1,env);
+						break;				
+					
+			case 3 : 	seDeplacer(1, -1,env);
+						break;
+		
+			case 4 :	seDeplacer(1, 0,env);
+						break;
+
+			case 5 : 	seDeplacer(1, 1,env);
+						break;				
+					
+			case 6 : 	seDeplacer(0, 1,env);
+						break;
+						
+			case 7 : 	seDeplacer(-1, 1,env);
+						break;
+
+			case 8 :	seDeplacer(-1, 0,env);
+						break;
+						
+			default : break;
+		}
+
+		
+	}
+	
 	/**
 	 * Fait le deplacement proprement dit
 	 * 
@@ -117,7 +121,9 @@ public abstract class Animal extends Matiere{
 	 * 
 	 * TODO gérer les deplacements en diagonal
 	 */
-	private void deplacer(int dx, int dy, Matiere [][] env){
+	private void seDeplacer(int dx, int dy, Matiere [][] env){
+		
+		env[this.rect.x][this.rect.y] = null;	// On met l'ancienne position à null
 		
 		// Si on est au bord gauche
 		if( (this.rect.x + dx) < 0 ){
@@ -132,7 +138,8 @@ public abstract class Animal extends Matiere{
 		}
 		else{
 			// On n'est pas au bord, tout va bien
-			this.rect.x += dx;
+			if(env[this.rect.x + dx][this.rect.y] == null)
+				this.rect.x += dx;
 		}
 		
 		// Si on est au bord du haut
@@ -147,16 +154,23 @@ public abstract class Animal extends Matiere{
 		}
 		else{
 			// On n'est pas au bord, tout va bien
-			this.rect.y += dy;
+			if(env[this.rect.x][this.rect.y + dy] == null)
+				this.rect.y += dy;
 		}
 		
+		env[this.rect.x][this.rect.y] = this;	// On met la nouvelle position à this
+		
 	}
+
 	
 	
 	public void meurt(Mort type_mort){
 		// TODO Auto-generated method stub
 		
-		System.out.println(this.toString() + " est mort !");
+		if(Debug.DEBUG_UNIVERS)
+			System.out.println("MORT de "+this.toString());
+		
+		this.estVivant = false;
 		
 		switch(type_mort){
 		
@@ -172,14 +186,15 @@ public abstract class Animal extends Matiere{
 							// TODO prevenir un observateur
 							break;
 		
+			default : 	meurtVieillesse = true;
+						break;
 		}
 	}
 	
-	
 	@Override
-	public boolean estVivant(){
+	public boolean vivant(){
 		
-		return !(this.meurtFaim || this.meurtMange || this.meurtVieillesse);
+		return estVivant;
 	}
 	
 	

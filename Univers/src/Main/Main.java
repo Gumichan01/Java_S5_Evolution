@@ -1,5 +1,6 @@
 package Main;
 
+import Modele.Debug;
 import Modele.Univers;
 
 
@@ -22,13 +23,13 @@ public class Main {
 	public static void main(String[] args) throws Exception{
 		// TODO Auto-generated method stub
 
-		Univers u = new Univers(10, 10, 1, 1);
+		if(Debug.DEBUG_UNIVERS)
+			System.out.println("Création de l'Univers");
 		
-		//System.out.println(u.toString());
+		new Univers(3, 3, 2, 2).evoluer();
 		
-		u.evoluer();
-		
-		
+		if(Debug.DEBUG_UNIVERS)
+			System.out.println("FIn de l'Univers");
 		
 	}
 
