@@ -1,7 +1,11 @@
 package Main;
 
+import ExceptionUnivers.ValeurNegativeException;
 import Modele.Debug;
 import Modele.Univers;
+import Observateurs.ObsUnivers;
+import Vue.Vue;
+import Vue.Vue_console;
 
 
 
@@ -12,8 +16,6 @@ import Modele.Univers;
  * 
  * @author Luxon JEAN-PIERRE & Kahina RAHANI
  *
- * TODO Kahina - Animal, Loup, Mouton, en gros tout la reste de la partie modèle 
- *
  */
 public class Main {
 
@@ -21,15 +23,30 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) throws Exception{
-		// TODO Auto-generated method stub
-
+		// TODO Finir les autres TODO avant de faire l'interface graphique
+		
 		if(Debug.DEBUG_UNIVERS)
 			System.out.println("Création de l'Univers");
 		
-		new Univers(3, 3, 2, 2).evoluer();
+		Univers u;
+		Vue v = new Vue_console();
 		
-		if(Debug.DEBUG_UNIVERS)
-			System.out.println("FIn de l'Univers");
+		try {
+			
+			u = new Univers(8, 4, 0, 1, v);
+			u.evoluer();
+			
+		}catch(Exception e){
+			
+			e.printStackTrace();
+		
+		}finally{
+			
+			if(Debug.DEBUG_UNIVERS)
+				System.out.println("Fin de l'Univers");			
+			
+		}
+
 		
 	}
 

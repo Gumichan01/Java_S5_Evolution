@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import ExceptionUnivers.RectangleNonValideException;
 import ExceptionUnivers.SymboleInvalideException;
 import ExceptionUnivers.ValeurNegativeException;
+import Observateurs.Observateur;
 
 public class Loup extends Animal implements MangeurMouton{
 
@@ -33,7 +34,8 @@ public class Loup extends Animal implements MangeurMouton{
 	@Override
 	public Animal seReproduire(Animal partenaire) {
 		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException("TODO : faire la reproduction du loup");
+		//return null;
 	}
 
 	
@@ -42,11 +44,32 @@ public class Loup extends Animal implements MangeurMouton{
 		
 		if(this.estVivant){
 
-			// TODO faire teste présence mouton sur une case adjacente, manger le mouton si possible, sino se deplacer
+			// TODO faire test présence mouton sur une case adjacente, manger le mouton si possible, sinon se deplacer
 			super.evoluerDans(env,null);
 			grandir();
 		}
 
+	}
+
+	@Override
+	public void ajoutObservateur(Observateur o) {
+		if(o == null){
+			throw new NullPointerException("Ajout d'un Observateur null");
+		}
+		else
+		{
+			observateurs.add(o);
+		}
+		
+	}
+
+	@Override
+	public void notifierObs() {
+		for(int i = 0; i<observateurs.size(); i++){
+			observateurs.get(i).notifier();
+			
+		}
+		
 	}
 	
 	/*public void evoluerDans(Matiere [][] env){

@@ -5,6 +5,9 @@ import java.awt.Rectangle;
 import ExceptionUnivers.RectangleNonValideException;
 import ExceptionUnivers.SymboleInvalideException;
 import ExceptionUnivers.ValeurNegativeException;
+import Observateurs.ObsMouton;
+import Observateurs.Observable;
+import Observateurs.Observateur;
 
 public class Mouton extends Animal{
 
@@ -12,13 +15,13 @@ public class Mouton extends Animal{
 			throws SymboleInvalideException, RectangleNonValideException,
 			ValeurNegativeException {
 		super(r, s, dureeDeVie, duree_survie, sexe);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public Animal seReproduire(Animal partenaire) {
 		// TODO Auto-generated method stub
-		return null;
+			throw new UnsupportedOperationException("TODO : faire la reproduction du mouton");
+		//return null;
 	}
 
 	@Override
@@ -27,11 +30,37 @@ public class Mouton extends Animal{
 		if(this.estVivant){
 					
 			// TODO faire teste si l'herbe est présent, si oui, manger. Sinon, se deplacer
-			super.evoluerDans(env, herbes);
 			grandir();
+			
+			// Si après avoir grandi, il est toujours vivant, OK
+			if(this.estVivant)
+				super.evoluerDans(env, herbes);
 		}
 		
 
+	}
+	
+	
+
+	@Override
+	public void ajoutObservateur(Observateur o) {
+		if(o == null){
+			throw new NullPointerException("Ajout d'un Observateur null");
+		}
+		else
+		{
+			observateurs.add(o);
+		}
+		
+	}
+
+	@Override
+	public void notifierObs() {
+		for(int i = 0; i<observateurs.size(); i++){
+			observateurs.get(i).notifier();
+			
+		}
+		
 	}
 
 }

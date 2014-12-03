@@ -8,6 +8,12 @@ import ExceptionUnivers.DimensionNonValideException;
 import ExceptionUnivers.RectangleNonValideException;
 import ExceptionUnivers.SymboleInvalideException;
 import ExceptionUnivers.ValeurNegativeException;
+import Observateurs.ObsLoup;
+import Observateurs.ObsMouton;
+import Observateurs.ObsUnivers;
+import Observateurs.Observable;
+import Observateurs.Observateur;
+import Vue.Vue;
 
 /**
  * La classe Univers représente le modèle principal dans le jeu
@@ -18,7 +24,7 @@ import ExceptionUnivers.ValeurNegativeException;
  * @author Luxon JEAN-PIERRE & Kahina RAHANI
  * 
  */
-public class Univers {
+public class Univers implements Observable {
 
 	private int largeur; 	// largeur de l'univers
 	private int hauteur;	// hauteur de l'univers
@@ -26,12 +32,12 @@ public class Univers {
 	private int tour = 0;
 	
 	private Matiere [][] plateau;	// Le plateau sur lequelle mettre les matières, une case vaut null si aucune matière n'est présente
-	//private String [][] grille;	// La grille où mettre les symboles (pour l'affichage) [! à mettre plutôt dans l'interface console ]
 	private boolean [][] herbes;	/* Ce tableau à double dimension indique si une case à de l'herbe (d'où la suppression Herbe) */
 	
-	ArrayList<Matiere> matieres;	// La liste de matières qui évolueront (SelMineral, Animuax,...)
+	private ArrayList<Matiere> matieres;	// La liste de matières qui évolueront (SelMineral, Animuax,...)
+	private ArrayList<Observateur> liste_observateurs;
 	
-	public Univers(int l, int h, int nbMouton, int nbLoup) 
+	public Univers(int l, int h, int nbMouton, int nbLoup, Vue v) 
 		throws ValeurNegativeException, DimensionNonValideException{
 		
 		if(l < 0)
@@ -56,6 +62,10 @@ public class Univers {
 
 		matieres = new ArrayList<Matiere>();
 		matieres.ensureCapacity((this.largeur*this.hauteur)+1); // On définit une capacité min = (taille totale du plateau + 1)
+		
+		
+		liste_observateurs = new ArrayList<Observateur>();
+		liste_observateurs.add(new ObsUnivers(this, v));
 		
 		// Position aléatoire
 		int xAlea;
@@ -84,7 +94,10 @@ public class Univers {
 			// Ajout de la nouvelle instance de l'animal dans l'ArrayList
 			try {
 				
-				this.ajouter(new Mouton(new Rectangle(xAlea, yAlea, 1, 1), "M", 50, Sexe.Femelle, 5)); 
+				Mouton m = new Mouton(new Rectangle(xAlea, yAlea, 1, 1), "M", 50, Sexe.Femelle, 5);
+				m.ajoutObservateur(new ObsMouton(m, v));
+				
+				this.ajouter(m); 
 				this.plateau[xAlea][yAlea] = this.matieres.get(this.matieres.size() - 1);
 
 			} catch (Exception e) {
@@ -107,7 +120,10 @@ public class Univers {
 			// Ajout de la nouvelle instance de l'animal dans l'ArrayList
 			try {
 				
-				this.ajouter(new Loup(new Rectangle(xAlea, yAlea, 1, 1),"L", 60, Sexe.Femelle, 10));
+				Loup loup = new Loup(new Rectangle(xAlea, yAlea, 1, 1),"L", 60, Sexe.Femelle, 10); 
+				loup.ajoutObservateur(new ObsLoup(loup, v));
+				
+				this.ajouter(loup);
 				this.plateau[xAlea][yAlea] = this.matieres.get(this.matieres.size() - 1);
 				
 			} catch (Exception e) {
@@ -164,8 +180,11 @@ public class Univers {
 			this.supprimerMorts();	// On supprime les morts
 			
 			// TODO tester si une case se libère, pour mettre les animaux en trop
-			
+
 			// Appel de la vue (l'observateur)
+			
+			this.notifierObs();
+			
 		}
 	}
 	
@@ -203,11 +222,38 @@ public class Univers {
 		return herbes;
 	}
 	
+	public Matiere [][] getPlateau(){
+		
+		return this.plateau;
+	}
+	
 	@Override
 	public String toString(){
 		
-		return "Univers - dimension(l,h) : ("+largeur+","+hauteur+")"
-				+" Tour numéro : "+tour+"; Nombre d'éléments au total :  "+matieres.size();
+		return "Tour : "+tour+" | Nombre d'éléments au total :  "+matieres.size();
+	}
+
+
+	@Override
+	public void ajoutObservateur(Observateur o) {
+	
+		if(o != null){
+			
+			liste_observateurs.add(o);
+		}
+		else
+			throw new NullPointerException(" Ajout d'un observateur null");
+	}
+
+
+	@Override
+	public void notifierObs() {
+
+		for(Observateur obs : liste_observateurs){
+			
+			obs.notifier();
+		}
+			
 	}
 }
 

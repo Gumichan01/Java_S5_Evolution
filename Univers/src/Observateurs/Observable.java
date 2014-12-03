@@ -9,7 +9,7 @@ package Observateurs;
  *
  *	TODO Luxon & Kahina - faire les sous-classes de Observable (pas tout de suite, on verra ça après)
  */
-public interface Observable_ {
+public interface Observable {
 
 	public void ajoutObservateur(Observateur o );
 	//public void enleverObservateur(Observateur o);

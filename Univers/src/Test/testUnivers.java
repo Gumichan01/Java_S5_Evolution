@@ -41,7 +41,7 @@ public class testUnivers {
 		
 		try{
 			
-			u = new Univers(l,h, nbM, nbL);
+			
 			
 		}catch(Exception e){
 			
@@ -126,28 +126,28 @@ public class testUnivers {
 	@Test(expected=ValeurNegativeException.class)
 	public void testVal1Exception() throws ValeurNegativeException, DimensionNonValideException{
 		
-		new Univers(1, 10, -1, 1);
+		
 		
 	}
 	
 	@Test(expected=ValeurNegativeException.class)
 	public void testVal2Exception() throws ValeurNegativeException, DimensionNonValideException{
 		
-		new Univers(1, 10, 1, -1);
+		
 		
 	}
 	
 	@Test(expected=DimensionNonValideException.class)
 	public void testVal3Exception() throws ValeurNegativeException, DimensionNonValideException{
 		
-		new Univers(-1, 10, 1, 1);
+		
 		
 	}
 	
 	@Test(expected=DimensionNonValideException.class)
 	public void testVal4Exception() throws ValeurNegativeException, DimensionNonValideException{
 		
-		new Univers(1, -10, 1, 1);
+		
 		
 	}	
 	
@@ -155,7 +155,7 @@ public class testUnivers {
 	@Test(expected=UnsupportedOperationException.class)
 	public void testTropAnimaux() throws ValeurNegativeException, DimensionNonValideException{
 		
-		new Univers(1, 1, 40, 40);
+		
 		
 	}
 	

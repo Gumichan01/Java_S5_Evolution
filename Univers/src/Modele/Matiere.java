@@ -1,6 +1,7 @@
 package Modele;
 
 import java.awt.Rectangle;
+import java.util.ArrayList;
 //import java.util.ArrayList;
 
 import ExceptionUnivers.RectangleNonValideException;
@@ -8,6 +9,7 @@ import ExceptionUnivers.SymboleInvalideException;
 import ExceptionUnivers.ValeurNegativeException;
 //import Observateurs.Observable_;
 //import Observateurs.Observateur;
+import Observateurs.Observateur;
 
 /**
  * 
@@ -24,7 +26,7 @@ public abstract class Matiere extends Entite /*implements Observable_*/ {
 
 	// TODO implements Observable
 	
-	//protected ArrayList<Observateur> observateurs;
+	protected ArrayList<Observateur> observateurs;
 	protected int duree_vie;
 	
 
@@ -50,6 +52,7 @@ public abstract class Matiere extends Entite /*implements Observable_*/ {
 					+" Durée mise dans le constructeur : " + dureeDeVie+" !");
 		
 		duree_vie = dureeDeVie;
+		observateurs = new ArrayList<Observateur>();
 	}
 
 

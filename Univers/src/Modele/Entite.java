@@ -57,6 +57,11 @@ public class Entite {
 		symbole = s;
 	}
 	
+	public String symbole(){
+		
+		return symbole;
+	}
+	
 	
 	public Rectangle getRect(){
 		

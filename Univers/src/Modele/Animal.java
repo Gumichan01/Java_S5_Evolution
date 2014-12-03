@@ -7,8 +7,9 @@ import javax.swing.AbstractAction;
 import ExceptionUnivers.RectangleNonValideException;
 import ExceptionUnivers.SymboleInvalideException;
 import ExceptionUnivers.ValeurNegativeException;
+import Observateurs.Observable;
 
-public abstract class Animal extends Matiere{
+public abstract class Animal extends Matiere implements Observable{
 	
 	protected int duree_survie;
 	protected boolean estVivant;
@@ -167,9 +168,6 @@ public abstract class Animal extends Matiere{
 	public void meurt(Mort type_mort){
 		// TODO Auto-generated method stub
 		
-		if(Debug.DEBUG_UNIVERS)
-			System.out.println("MORT de "+this.toString());
-		
 		this.estVivant = false;
 		
 		switch(type_mort){
@@ -189,7 +187,24 @@ public abstract class Animal extends Matiere{
 			default : 	meurtVieillesse = true;
 						break;
 		}
+		
+		this.notifierObs();
+		
 	}
+	
+	public Mort getEtatMort(){
+		
+		if(meurtFaim){
+			return Mort.Faim;
+		}
+		else if(meurtMange){
+			return Mort.Mange;
+		}
+		else{
+			return Mort.Naturel;
+		}
+	}
+	
 	
 	@Override
 	public boolean vivant(){
