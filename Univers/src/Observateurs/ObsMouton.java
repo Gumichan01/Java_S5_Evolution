@@ -1,19 +1,18 @@
 package Observateurs;
 
-import Modele.Mort;
-import Modele.Mouton;
-import Vue.Vue;
 
-public class ObsMouton implements Observateur{
+import vue.Vue_console;
+import modele.Mort;
+import modele.Mouton;
+
+public class ObsMouton extends Vue_console implements Observateur{
 
 	
 	Mouton moutonObservable;
-	Vue vue;
 	
-	public ObsMouton(Mouton m, Vue v){
+	public ObsMouton(Mouton m){
 		
 		this.moutonObservable = m;
-		this.vue = v;
 		
 	}
 	
@@ -26,15 +25,15 @@ public class ObsMouton implements Observateur{
 		
 		if(moutonObservable.getEtatMort()==Mort.Faim){
 			
-			vue.afficherMort("["+ligne+colonne+"] : Un mouton meurt de faim");
+			this.afficherMort("["+ligne+colonne+"] : Un mouton meurt de faim");
 		}
 		else if(moutonObservable.getEtatMort()==Mort.Mange){
 			
-			vue.afficherMort("["+ligne+colonne+"] : Un mouton a servi de repas");
+			this.afficherMort("["+ligne+colonne+"] : Un mouton a servi de repas");
 		}
 		else{
 			
-			vue.afficherMort("["+ligne+colonne+"] : Un mouton meurt de vieillesse");
+			this.afficherMort("["+ligne+colonne+"] : Un mouton meurt de vieillesse");
 		}
 		
 	}

@@ -1,19 +1,17 @@
 package Observateurs;
 
-import Modele.Mort;
-import Modele.Loup;
-import Vue.Vue;
+import vue.Vue;
+import modele.Loup;
+import modele.Mort;
 
 public class ObsLoup implements Observateur{
 
 	Loup loupObservable;
 	Vue vue;
 	
-	public ObsLoup(Loup l, Vue v){
+	public ObsLoup(Loup l){
 		
 		this.loupObservable = l;
-		this.vue = v;
-		
 	}
 	
 	@Override

@@ -1,19 +1,18 @@
 package Observateurs;
 
-import Modele.Matiere;
-import Modele.Univers;
-import Vue.Vue;
+import modele.Matiere;
+import univers.Univers;
+import vue.Vue_console;
 
-public class ObsUnivers implements Observateur{
+
+
+public class ObsUnivers extends Vue_console implements Observateur{
 
 	Univers universObservable;
-	Vue vue;
 	
-	public ObsUnivers(Univers u, Vue v){
+	public ObsUnivers(Univers u){
 		
 		this.universObservable = u;
-		this.vue = v;
-		
 	}
 
 	@Override
@@ -41,7 +40,7 @@ public class ObsUnivers implements Observateur{
 			
 		}
 		
-		vue.afficherGrille(grille);
+		this.afficherGrille(grille);
 		
 	}
 	
