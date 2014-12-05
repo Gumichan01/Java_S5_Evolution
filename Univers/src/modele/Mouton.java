@@ -2,6 +2,9 @@ package modele;
 
 import java.awt.Rectangle;
 
+import univers.Case;
+import univers.Nourriture;
+
 import exceptionUnivers.RectangleNonValideException;
 import exceptionUnivers.SymboleInvalideException;
 import exceptionUnivers.ValeurNegativeException;
@@ -27,7 +30,7 @@ public class Mouton extends Animal{
 	}
 
 	@Override
-	public void evoluerDans(Matiere [][] env, boolean [][] herbes){
+	public void evoluerDans(Case [][] env){
 		
 		// S'il n'a pas déjà été mangé (toujours vivant ?) alors il grandit
 		if(this.estVivant)
@@ -39,17 +42,17 @@ public class Mouton extends Animal{
 			int x = this.rect.x;
 			int y = this.rect.y;
 			
-			if(herbes[x][y] == true){
+			if(env[x][y].getNourriture() == Nourriture.Herbe){
 				
-				herbes[x][y] = false;
+				// Il y avait de l'herbe, donc on le mange
+				env[x][y].setNourriture(Nourriture.Rien);
 				this.compt_survie = 0;
-				System.out.println("\n ("+rect.x+","+rect.y+") Le mouton mange de l'herbe \n");
+				//System.out.println("\n ("+rect.x+","+rect.y+") Le mouton mange de l'herbe \n");	// A enlever
 			}
 			else{
 				
-				super.evoluerDans(env, herbes);
+				super.evoluerDans(env);
 			}
-
 			
 		}
 		else{
@@ -60,14 +63,16 @@ public class Mouton extends Animal{
 				int y = this.rect.y;
 				
 				try {
-
-					SelMineral sel = new SelMineral(this.getRect());
-					
-					env[x][y] = sel;
-					env[x][y].ajoutObservateur( new ObsSelMineraux(sel) );
-					
+					// La case est-elle depourvue de quoi que ce soit ?
+					if(env[x][y].getNourriture() == Nourriture.Rien ){
+						
+						SelMineral sel = new SelMineral(this.getRect());
+						sel.ajoutObservateur(new ObsSelMineraux(sel));
+						
+						env[x][y].setNewMatiere(sel);
+					}
 				}catch(Exception e){
-					env[x][y] = null;
+					env[x][y].setNewMatiere(null);
 				}
 			}
 			

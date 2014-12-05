@@ -2,6 +2,9 @@ package modele;
 
 import java.awt.Rectangle;
 
+import univers.Case;
+import univers.Nourriture;
+
 import exceptionUnivers.RectangleNonValideException;
 import exceptionUnivers.SymboleInvalideException;
 import exceptionUnivers.ValeurNegativeException;
@@ -41,17 +44,17 @@ public class SelMineral extends Matiere{
 	}
 
 	@Override
-	public void evoluerDans(Matiere[][] env, boolean[][] herbes) {
+	public void evoluerDans(Case [][] env) {
 		
 		//if(env[this.rect.x][this.rect.y] == null)	// Si la case était vide, c'est pas normal, mais pas grave
-			env[this.rect.x][this.rect.y] = this;
+			env[this.rect.x][this.rect.y].setNewMatiere(this);
 		
 		this.compteur += 1;
 		
 		if(this.compteur == this.duree_existence)	
 			this.notifierObs();						// On previent les observateurs de la fin de l'existence
 		else if(this.compteur > duree_existence)
-			herbes[this.rect.x][this.rect.y] = true;	// L'herbe repousse
+			env[this.rect.x][this.rect.y].setNourriture(Nourriture.Herbe);	// L'herbe repousse
 		
 	}
 

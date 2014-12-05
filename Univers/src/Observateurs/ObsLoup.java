@@ -1,13 +1,13 @@
 package Observateurs;
 
-import vue.Vue;
+
+import vue.Vue_console;
 import modele.Loup;
 import modele.Mort;
 
-public class ObsLoup implements Observateur{
+public class ObsLoup extends Vue_console implements Observateur{
 
 	Loup loupObservable;
-	Vue vue;
 	
 	public ObsLoup(Loup l){
 		
@@ -22,15 +22,15 @@ public class ObsLoup implements Observateur{
 		
 		if(loupObservable.getEtatMort()==Mort.Faim){
 			
-			vue.afficherMort("["+ligne+colonne+"] : Un loup meurt de faim");
+			this.afficherMort("["+ligne+colonne+"] : Un loup meurt de faim");
 		}
 		else if(loupObservable.getEtatMort()==Mort.Mange){
 			
-			vue.afficherMort("["+ligne+colonne+"] : Un loup a servi de repas");
+			this.afficherMort("["+ligne+colonne+"] : Un loup a servi de repas");
 		}
 		else{
 			
-			vue.afficherMort("["+ligne+colonne+"] : Un loup meurt de vieillesse");
+			this.afficherMort("["+ligne+colonne+"] : Un loup meurt de vieillesse");
 		}
 		
 	}

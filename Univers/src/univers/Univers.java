@@ -38,14 +38,14 @@ public class Univers implements Observable {
 
 	private int tour = 0;
 
-	private Matiere [][] plateau;	// Le plateau sur lequelle mettre les matières, une case vaut null si aucune matière n'est présente
-	private boolean [][] herbes;	/* Ce tableau à double dimension indique si une case à de l'herbe (d'où la suppression Herbe) */
+	private Case [][] plateau;	// Le plateau sur lequelle mettre les matières, une case vaut null si aucune matière n'est présente
+	//private boolean [][] herbes;	/** @deprecated Supprimer ça - tableau à double dimension qui indique si une case à de l'herbe (d'où la suppression Herbe) */
 
 	private ArrayList<Matiere> matieres;	// La liste de matières qui évolueront (SelMineral, Animuax,...)
 	private ArrayList<Observateur> liste_observateurs;
 	//private LinkedList<Animal> file;
 
-	public Univers(int l, int h, int nbMouton, int nbLoup, Vue v) 
+	public Univers(int l, int h, int nbMouton, int nbLoup) 
 		throws ValeurNegativeException, DimensionNonValideException{
 
 		if(l < 0 || l > 999)
@@ -68,8 +68,8 @@ public class Univers implements Observable {
 		this.largeur = l;
 		this.hauteur = h;
 		
-		plateau = new Matiere[largeur][hauteur];
-		herbes = new boolean[largeur][hauteur];
+		plateau = new Case[largeur][hauteur];	/** @deprecated Supprimer ça*/
+		//herbes = new boolean[largeur][hauteur];
 
 		matieres = new ArrayList<Matiere>();
 		matieres.ensureCapacity((this.largeur*this.hauteur)+1); // On définit une capacité min = (taille totale du plateau + 1)
@@ -78,18 +78,38 @@ public class Univers implements Observable {
 		liste_observateurs = new ArrayList<Observateur>();
 		liste_observateurs.add(new ObsUnivers(this));
 
-		// Position aléatoire
-		int xAlea;
-		int yAlea;
-
-		for(int i = 0;i < this.largeur; i++ ){
+		
+		try{
+		
+			for(int i = 0; i < largeur; i++){
+				
+				for(int j = 0; j < hauteur; j++){
+					
+					plateau[i][j] = new Case(i,j);
+				}
+				
+			}
+		
+		}catch(ValeurNegativeException ve ){
+			
+			System.out.println("FATAL ERROR : Un erreur grave s'est produite lors de l'initialisation du plateau :"
+								+ve.getMessage());
+			throw ve;
+		}
+		
+		/** @deprecated Supprimer ça*/
+		/*for(int i = 0;i < this.largeur; i++ ){
 			
 			for(int j = 0; j< this.hauteur;j++){
 				
 				herbes[i][j] = true;
 			}
-		}
-
+		}*/
+		
+		
+		// Position aléatoire
+		int xAlea;
+		int yAlea;
 
 		// On place les moutons
 		for(int i = 1; i <= nbMouton;i++){
@@ -99,7 +119,7 @@ public class Univers implements Observable {
 			xAlea = (int)(Math.random()*this.largeur);
 			yAlea = (int)(Math.random()*this.hauteur);
 
-			}while(plateau[xAlea][yAlea] != null);
+			}while(plateau[xAlea][yAlea].getMatierDansCase() != null);
 
 
 			// Ajout de la nouvelle instance de l'animal dans l'ArrayList
@@ -109,7 +129,7 @@ public class Univers implements Observable {
 				m.ajoutObservateur(new ObsMouton(m));
 		
 				this.ajouter(m); 
-				this.plateau[xAlea][yAlea] = this.matieres.get(this.matieres.size() - 1);
+				this.plateau[xAlea][yAlea].setNewMatiere(this.matieres.get(this.matieres.size() - 1));
 
 			} catch (Exception e) {
 
@@ -126,7 +146,7 @@ public class Univers implements Observable {
 			xAlea = (int)(Math.random()*this.largeur);
 			yAlea = (int)(Math.random()*this.hauteur);
 
-			}while(plateau[xAlea][yAlea] != null);
+			}while(plateau[xAlea][yAlea].getMatierDansCase() != null);
 
 			// Ajout de la nouvelle instance de l'animal dans l'ArrayList
 			try {
@@ -135,7 +155,7 @@ public class Univers implements Observable {
 				loup.ajoutObservateur(new ObsLoup(loup));
 				
 				this.ajouter(loup);
-				this.plateau[xAlea][yAlea] = this.matieres.get(this.matieres.size() - 1);
+				this.plateau[xAlea][yAlea].setNewMatiere(this.matieres.get(this.matieres.size() - 1));
 				
 			} catch (Exception e) {
 
@@ -179,7 +199,7 @@ public class Univers implements Observable {
 
 			for(int i = 0;i < matieres.size();i++){
 
-				matieres.get(i).evoluerDans(this.plateau, this.herbes);
+				matieres.get(i).evoluerDans(this.plateau);
 			}
 
 			if(Debug.DEBUG_UNIVERS)
@@ -202,8 +222,8 @@ public class Univers implements Observable {
 		for(int c = 0; c < this.largeur ; c++){
 			for(int l = 0; l < this.hauteur; l++){
 				
-				if(plateau[c][l] instanceof SelMineral)
-					ajouter(plateau[c][l]);
+				if(plateau[c][l].getMatierDansCase() instanceof SelMineral)
+					ajouter(plateau[c][l].getMatierDansCase());
 				
 			}	
 		}
@@ -216,7 +236,7 @@ public class Univers implements Observable {
 			if(!this.matieres.get(i).vivant()){
 				
 				// On met l'emplacement du mort à null
-				plateau[this.matieres.get(i).getRect().x][this.matieres.get(i).getRect().y] = null;
+				plateau[this.matieres.get(i).getRect().x][this.matieres.get(i).getRect().y].setNewMatiere(null);
 				
 				this.matieres.remove(i);	// On le supprime
 				i--;	// On décrémente i à cause du décalage vers la gauche
@@ -239,13 +259,9 @@ public class Univers implements Observable {
 		
 		return matieres;
 	}
+
 	
-	public boolean [][] getHerbes(){
-		
-		return herbes;
-	}
-	
-	public Matiere [][] getPlateau(){
+	public Case [][] getPlateau(){
 		
 		return this.plateau;
 	}

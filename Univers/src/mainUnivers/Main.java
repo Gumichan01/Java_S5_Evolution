@@ -29,17 +29,16 @@ public class Main {
 			System.out.println("Création de l'Univers");
 		
 		Univers u;
-		//Vue v = new Vue_console();
 		
 		try {
 			
-			u = new Univers(4, 4, 4, 0, new Vue_console());
+			u = new Univers(10, 8, 10, 10);
 			u.evoluer();
 			
 		}catch(Exception e){
 			
 			System.out.println("Une erreur s'est produite : "+ e.getMessage());
-			//e.printStackTrace();
+			e.printStackTrace();
 			
 		}finally{
 			

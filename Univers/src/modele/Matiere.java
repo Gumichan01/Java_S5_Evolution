@@ -3,6 +3,8 @@ package modele;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
+import univers.Case;
+
 import exceptionUnivers.RectangleNonValideException;
 import exceptionUnivers.SymboleInvalideException;
 import exceptionUnivers.ValeurNegativeException;
@@ -58,7 +60,7 @@ public abstract class Matiere extends Entite implements Observable {
 	}
 
 
-	public abstract void evoluerDans(Matiere [][] env, boolean [][] herbes); 
+	public abstract void evoluerDans(Case [][] env); 
 	
 	public abstract boolean vivant();
 	

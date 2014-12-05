@@ -1,6 +1,7 @@
 package Observateurs;
 
 import modele.Matiere;
+import univers.Case;
 import univers.Univers;
 import vue.Vue_console;
 
@@ -19,7 +20,7 @@ public class ObsUnivers extends Vue_console implements Observateur{
 	public void notifier() {
 		// TODO Auto-generated method stub
 		
-		Matiere [][] plateau = universObservable.getPlateau();
+		Case [][] plateau = universObservable.getPlateau();
 		
 		String [][] grille = new String[plateau.length][plateau[0].length];
 		
@@ -27,13 +28,13 @@ public class ObsUnivers extends Vue_console implements Observateur{
 		{
 			for(int l = 0; l < plateau[0].length; l++)
 			{
-				if(plateau[c][l] == null){
+				if(plateau[c][l].getMatierDansCase() == null){
 					
 					grille[c][l] = " ";
 				}
 				else{
 					
-					grille[c][l] = plateau[c][l].symbole();
+					grille[c][l] = plateau[c][l].getMatierDansCase().symbole();
 				}
 				
 			}
