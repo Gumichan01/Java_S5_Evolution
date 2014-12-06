@@ -1,6 +1,6 @@
 package vue;
 
-import Observateurs.Observateur;
+import observateurs.Observateur;
 
 public interface Vue{
 

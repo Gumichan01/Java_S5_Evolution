@@ -1,7 +1,11 @@
 package modele;
 
+import java.awt.Rectangle;
+
+import univers.Case;
+
 public interface Carnivore {
 	
-	public boolean manger(Animal nourriture);
+	public void manger(Animal proie);
 
 }

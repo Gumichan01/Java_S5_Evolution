@@ -1,4 +1,4 @@
-package Observateurs;
+package observateurs;
 
 import modele.Matiere;
 import univers.Case;

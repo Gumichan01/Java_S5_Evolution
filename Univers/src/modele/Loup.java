@@ -2,6 +2,9 @@ package modele;
 
 import java.awt.Rectangle;
 
+import observateurs.ObsSelMineraux;
+import observateurs.Observateur;
+
 import univers.Case;
 import univers.Nourriture;
 
@@ -9,13 +12,9 @@ import exceptionUnivers.RectangleNonValideException;
 import exceptionUnivers.SymboleInvalideException;
 import exceptionUnivers.ValeurNegativeException;
 
-import Observateurs.ObsSelMineraux;
-import Observateurs.Observateur;
 
-public class Loup extends Animal implements MangeurMouton{
+public class Loup extends Animal implements Carnivore{
 
-	
-	
 
 	public Loup(Rectangle r, String s, int dureeDeVie,Sexe sexe, int duree_survie)
 			throws SymboleInvalideException, RectangleNonValideException,
@@ -23,18 +22,15 @@ public class Loup extends Animal implements MangeurMouton{
 		super(r, s, dureeDeVie, duree_survie, sexe);
 		
 	}
-	// TODO Auto-generated constructor stub
+	
 	@Override
-	public boolean manger(Animal nourriture) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void mangerMouton(Mouton mouton) {
-		// TODO Auto-generated method stub
+	public void manger(Animal proie) {
+		
+		proie.meurt(Mort.Mange);
+		this.compt_survie = 0;	// On remet le compteur à 0 car le loup est rassasié
 		
 	}
+
 
 	@Override
 	public Animal seReproduire(Animal partenaire) {
@@ -50,8 +46,17 @@ public class Loup extends Animal implements MangeurMouton{
 		grandir();
 		
 		if(this.estVivant){
-			// TODO faire test présence mouton sur une case adjacente, manger le mouton si possible, sinon se deplacer
-			super.evoluerDans(env);
+			
+			Rectangle r = this.voisinAProximiteDans(env);	//
+			
+			if( r != null && env[r.x][r.y].getMatierDansCase() instanceof Mouton){
+				// On a une proie voisine à devorer
+				/* Pas très propre le cast, mais la méthode proieAProximiteDans() renvoie les coordonnées de l'animal qui fait office de proie
+				 * Içi c'est le mouton, mais cela est applicable à n'importe quelle autre animal qui peut être la proie d'un loup */
+				this.manger((Animal) env[r.x][r.y].getMatierDansCase());
+			}
+			else
+				super.evoluerDans(env);
 		}
 		else{
 			
@@ -72,6 +77,7 @@ public class Loup extends Animal implements MangeurMouton{
 					}
 					
 				}catch(Exception e){
+					// Il y a eu un problème, la case est inoccupé
 					env[x][y].setNewMatiere(null);
 				}
 			}

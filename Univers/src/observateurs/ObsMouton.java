@@ -1,4 +1,4 @@
-package Observateurs;
+package observateurs;
 
 
 import vue.Vue_console;

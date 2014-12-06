@@ -3,6 +3,9 @@ package modele;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
+import observateurs.Observable;
+import observateurs.Observateur;
+
 import univers.Case;
 
 import exceptionUnivers.RectangleNonValideException;
@@ -12,8 +15,6 @@ import exceptionUnivers.ValeurNegativeException;
 
 //import Observateurs.Observable_;
 //import Observateurs.Observateur;
-import Observateurs.Observable;
-import Observateurs.Observateur;
 
 /**
  * 

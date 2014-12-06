@@ -1,11 +1,11 @@
 package mainUnivers;
 
+import observateurs.ObsUnivers;
 import modele.Debug;
 import univers.Univers;
 import vue.Vue;
 import vue.Vue_console;
 import exceptionUnivers.ValeurNegativeException;
-import Observateurs.ObsUnivers;
 
 
 
@@ -20,7 +20,7 @@ import Observateurs.ObsUnivers;
 public class Main {
 
 	/**
-	 * @param args
+	 * @param args Les paramètres positionnels ne servent à rien 
 	 */
 	public static void main(String[] args) throws Exception{
 		// TODO Finir les autres TODO avant de faire l'interface graphique
@@ -32,12 +32,13 @@ public class Main {
 		
 		try {
 			
-			u = new Univers(10, 8, 10, 10);
+			u = new Univers(32, 8, 32, 8);
 			u.evoluer();
+			
 			
 		}catch(Exception e){
 			
-			System.out.println("Une erreur s'est produite : "+ e.getMessage());
+			//System.out.println("Une erreur s'est produite : "+ e.getMessage());
 			e.printStackTrace();
 			
 		}finally{

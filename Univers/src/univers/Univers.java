@@ -4,8 +4,15 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import observateurs.ObsLoup;
+import observateurs.ObsMouton;
+import observateurs.ObsUnivers;
+import observateurs.Observable;
+import observateurs.Observateur;
+
 import vue.Vue;
 
+import modele.Animal;
 import modele.Debug;
 import modele.Loup;
 import modele.Matiere;
@@ -16,15 +23,13 @@ import modele.Sexe;
 import exceptionUnivers.DimensionNonValideException;
 import exceptionUnivers.ValeurNegativeException;
 
-import Observateurs.ObsLoup;
-import Observateurs.ObsMouton;
-import Observateurs.ObsUnivers;
-import Observateurs.Observable;
-import Observateurs.Observateur;
 
 /**
  * La classe Univers représente le modèle principal dans le jeu
- * Il contient les différentes entités
+ * Il contient les différentes entités, mais aussi le plateau
+ * 
+ * Dans le cadre de ce projet, nous avaons fait le choix de créer un univers en tore bidimensionnel
+ * http://fr.wikipedia.org/wiki/Univers_en_tore_bidimensionnel
  * 
  * Cette univers va évoluer au fur et à mesure de l'état des entités cibles
  * 
@@ -39,7 +44,6 @@ public class Univers implements Observable {
 	private int tour = 0;
 
 	private Case [][] plateau;	// Le plateau sur lequelle mettre les matières, une case vaut null si aucune matière n'est présente
-	//private boolean [][] herbes;	/** @deprecated Supprimer ça - tableau à double dimension qui indique si une case à de l'herbe (d'où la suppression Herbe) */
 
 	private ArrayList<Matiere> matieres;	// La liste de matières qui évolueront (SelMineral, Animuax,...)
 	private ArrayList<Observateur> liste_observateurs;
@@ -69,7 +73,6 @@ public class Univers implements Observable {
 		this.hauteur = h;
 		
 		plateau = new Case[largeur][hauteur];	/** @deprecated Supprimer ça*/
-		//herbes = new boolean[largeur][hauteur];
 
 		matieres = new ArrayList<Matiere>();
 		matieres.ensureCapacity((this.largeur*this.hauteur)+1); // On définit une capacité min = (taille totale du plateau + 1)
@@ -96,15 +99,6 @@ public class Univers implements Observable {
 								+ve.getMessage());
 			throw ve;
 		}
-		
-		/** @deprecated Supprimer ça*/
-		/*for(int i = 0;i < this.largeur; i++ ){
-			
-			for(int j = 0; j< this.hauteur;j++){
-				
-				herbes[i][j] = true;
-			}
-		}*/
 		
 		
 		// Position aléatoire
@@ -190,9 +184,10 @@ public class Univers implements Observable {
 			try{	// On laisse s'écouler 1 seconde entre chaque tour
 					// On le baissera sans doute à 500 millisecondes pour un grand nombre d'éléments
 				Thread.sleep(1000);
-			
+				
 			}catch(InterruptedException e){
 				
+				e.printStackTrace();
 			}
 
 			tour++;
@@ -217,13 +212,21 @@ public class Univers implements Observable {
 	}
 
 	private void recupererNouvMatieres(){
-		
-		// On récupère les sels minéraux
+
 		for(int c = 0; c < this.largeur ; c++){
 			for(int l = 0; l < this.hauteur; l++){
+
+				Matiere tmp = plateau[c][l].getMatierDansCase();
 				
-				if(plateau[c][l].getMatierDansCase() instanceof SelMineral)
-					ajouter(plateau[c][l].getMatierDansCase());
+				// On récupère les sels minéraux
+				if(tmp instanceof SelMineral)
+					ajouter(tmp);
+				else if(tmp instanceof Animal && !this.matieres.contains(tmp)){ 
+					// On a un nouvel animal qui vient de naitre;
+					System.out.println("EVENT : Un animal vient de naitre ");
+					this.matieres.add(tmp);
+				}
+					
 				
 			}	
 		}
@@ -243,7 +246,27 @@ public class Univers implements Observable {
 			}
 		}
 	}
+
+
+	@Override
+	public void ajoutObservateur(Observateur o) {
 	
+		if(o != null){
+			
+			liste_observateurs.add(o);
+		}
+	}
+
+
+	@Override
+	public void notifierObs() {
+
+		for(Observateur obs : liste_observateurs){
+			
+			obs.notifier();
+		}
+			
+	}
 	
 	public int getLargeur(){
 		
@@ -270,29 +293,6 @@ public class Univers implements Observable {
 	public String toString(){
 		
 		return "\nTour : "+tour+" | Nombre d'éléments au total :  "+matieres.size();
-	}
-
-
-	@Override
-	public void ajoutObservateur(Observateur o) {
-	
-		if(o != null){
-			
-			liste_observateurs.add(o);
-		}
-		else
-			throw new NullPointerException(" Ajout d'un observateur null");
-	}
-
-
-	@Override
-	public void notifierObs() {
-
-		for(Observateur obs : liste_observateurs){
-			
-			obs.notifier();
-		}
-			
 	}
 }
 

@@ -2,6 +2,11 @@ package modele;
 
 import java.awt.Rectangle;
 
+import observateurs.ObsMouton;
+import observateurs.ObsSelMineraux;
+import observateurs.Observable;
+import observateurs.Observateur;
+
 import univers.Case;
 import univers.Nourriture;
 
@@ -9,10 +14,6 @@ import exceptionUnivers.RectangleNonValideException;
 import exceptionUnivers.SymboleInvalideException;
 import exceptionUnivers.ValeurNegativeException;
 
-import Observateurs.ObsMouton;
-import Observateurs.ObsSelMineraux;
-import Observateurs.Observable;
-import Observateurs.Observateur;
 
 public class Mouton extends Animal{
 
@@ -80,6 +81,7 @@ public class Mouton extends Animal{
 
 
 	}
+
 
 
 }

@@ -2,15 +2,12 @@ package modele;
 
 import java.awt.Rectangle;
 
-import javax.swing.AbstractAction;
-
 import univers.Case;
 
 import exceptionUnivers.RectangleNonValideException;
 import exceptionUnivers.SymboleInvalideException;
 import exceptionUnivers.ValeurNegativeException;
 
-import Observateurs.Observable;
 
 public abstract class Animal extends Matiere{
 	
@@ -47,7 +44,134 @@ public abstract class Animal extends Matiere{
 	}
 	
 	public abstract Animal seReproduire(Animal partenaire);
+	
+	/**
+	 * On vérifie si l'animal courant a un voisin
+	 * 
+	 * @param env le plateau où evolue l'animal
+	 * @return Les coordonnées du voisin s'il y en a un, null sinon
+	 *  
+	 */
+	public Rectangle voisinAProximiteDans(Case[][] env) {
 
+		int xDroiteAdj, xGaucheAdj; 	// La position du voisin à droite ou bien à gauche
+		int yHautAdj, yBasAdj;			// La position du voisin d'en haut ou bien en bas
+		int xProie, yProie;
+		
+		// On met à -1 pour indiquer qu'on n'a pas de voisin
+		xProie = -1;
+		yProie = -1;
+		
+		
+		/*	Dans un premier temps, on va stocker les coordonnées des cases adjacentes
+		 	d'abord en x */
+		
+		// On fixe la position X du voisin de droite 
+		if((this.rect.x + 1) == env.length){
+			
+			// On est au bord droit
+			xDroiteAdj = 0;
+		}
+		else{
+			// Pas de problème
+			xDroiteAdj = this.rect.x + 1; 
+		}
+
+		// On fait de même à gauche 
+		if((this.rect.x - 1) < 0){
+			// On est au bord gauche
+			xGaucheAdj = env.length - 1;
+		}
+		else{
+			// Pas de problème
+			xGaucheAdj = this.rect.x - 1;
+		}
+		
+		
+		/* Puis en y */
+		
+		// On fixe la position Y du voisin du bas
+		if((this.rect.y + 1) >= env[this.rect.x].length){
+			
+			// On est au bord du bas
+			yBasAdj = 0;
+		}
+		else{	
+			// Pas de problème
+			yBasAdj = this.rect.y + 1;
+		}
+				
+		// On fait de même en haut 
+		if((this.rect.y - 1) < 0){
+
+			// On est au bord gauche
+			yHautAdj = env[this.rect.x].length - 1;
+		}
+		else{	
+			// Pas de problème
+			yHautAdj = this.rect.y - 1;
+		}
+		
+		// Proie à gauche
+		if(env[xGaucheAdj][this.rect.y].getMatierDansCase() instanceof Animal){
+			
+			// Proie à gauche
+			xProie = xGaucheAdj;
+			yProie = this.rect.y;
+
+		}
+		else if(env[xGaucheAdj][yHautAdj].getMatierDansCase() instanceof Animal){
+			
+			// Proie en haut à gauche
+			xProie = xGaucheAdj;
+			yProie = yHautAdj;
+
+		}
+		else if(env[this.rect.x][yHautAdj].getMatierDansCase() instanceof Animal){
+			
+			// Proie en haut
+			xProie = this.rect.x;
+			yProie = yHautAdj;
+
+		}
+		else if(env[xDroiteAdj][yHautAdj].getMatierDansCase() instanceof Animal){
+			
+			// Proie en haut à droite
+			xProie = xDroiteAdj;
+			yProie = yHautAdj;
+
+		}
+		else if(env[xDroiteAdj][this.rect.y].getMatierDansCase() instanceof Animal){
+			
+			// Proie à droite
+			xProie = xDroiteAdj;
+			yProie = this.rect.y;
+
+		}
+		else if(env[xDroiteAdj][yBasAdj].getMatierDansCase() instanceof Animal){
+			
+			// Proie en bas à droite
+			xProie = xDroiteAdj;
+			yProie = yBasAdj;
+
+		}
+		else if(env[this.rect.x][yBasAdj].getMatierDansCase() instanceof Animal){
+			
+			// Proie en bas
+			xProie = this.rect.x;
+			yProie = yBasAdj;
+			
+		}
+		else if(env[xGaucheAdj][yBasAdj].getMatierDansCase() instanceof Animal){ 
+			
+			xProie = xGaucheAdj;
+			yProie = yBasAdj;
+		}
+		
+		// Après avoir fait tous ces tests, a-t-on trouvé un voisin ?
+		return ( (xProie == -1) && (yProie == -1) ) ? null: new Rectangle(xProie,yProie,0,0);
+
+	}
 
 	protected void grandir(){
 		
@@ -117,7 +241,7 @@ public abstract class Animal extends Matiere{
 	 */
 	private void seDeplacer(int dx, int dy, Case [][] env){
 		
-		env[this.rect.x][this.rect.y].setNewMatiere(null);	// On met l'ancienne position à null
+		env[this.rect.x][this.rect.y].setNewMatiere(null);	// On rend la case inoccupée 
 		
 		// Si on est au bord gauche
 		if( (this.rect.x + dx) < 0 ){
@@ -152,7 +276,7 @@ public abstract class Animal extends Matiere{
 				this.rect.y += dy;
 		}
 		
-		env[this.rect.x][this.rect.y].setNewMatiere(this);	// On met la nouvelle position à this
+		env[this.rect.x][this.rect.y].setNewMatiere(this);	// On met la nnouvelle case occupée
 		
 	}
 

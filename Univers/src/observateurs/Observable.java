@@ -1,4 +1,4 @@
-package Observateurs;
+package observateurs;
 /**
  * Gère les élément observable par les {@link Obervateur}, 
  * La classe Observable est utilisé dans le patron de conception Observateur
