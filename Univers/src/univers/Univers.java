@@ -179,7 +179,7 @@ public class Univers implements Observable {
 
 	public void evoluer(){
 
-		while(matieres.size() != 0){
+		while(nbAnimaux() > 0){
 
 			try{	// On laisse s'écouler 1 seconde entre chaque tour
 					// On le baissera sans doute à 500 millisecondes pour un grand nombre d'éléments
@@ -197,8 +197,8 @@ public class Univers implements Observable {
 				matieres.get(i).evoluerDans(this.plateau);
 			}
 
-			if(Debug.DEBUG_UNIVERS)
-				System.out.println(this.toString());
+			/*if(Debug.DEBUG_UNIVERS)
+				System.out.println(this.toString());*/
 
 			this.recupererNouvMatieres();
 			this.supprimerMorts();	// On supprime les morts
@@ -209,6 +209,8 @@ public class Univers implements Observable {
 			this.notifierObs();
 
 		}
+		
+		//this.notifierObs();
 	}
 
 	private void recupererNouvMatieres(){
@@ -250,6 +252,20 @@ public class Univers implements Observable {
 		}
 	}
 
+	private int nbAnimaux(){
+		
+		int compt = 0;
+		
+		for(Matiere m  : this.matieres){
+			
+			if(m instanceof Animal)
+				compt++;
+			
+		}
+		
+		return compt;
+	}
+	
 
 	@Override
 	public void ajoutObservateur(Observateur o) {
@@ -295,7 +311,7 @@ public class Univers implements Observable {
 	@Override
 	public String toString(){
 		
-		return "\nTour : "+tour+" | Nombre d'éléments au total :  "+matieres.size();
+		return "\nTour : "+tour+" | Nombre d'animaux :  "+nbAnimaux();
 	}
 }
 

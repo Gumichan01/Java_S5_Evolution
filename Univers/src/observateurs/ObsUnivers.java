@@ -42,6 +42,7 @@ public class ObsUnivers extends Vue_console implements Observateur{
 		}
 		
 		this.afficherGrille(grille);
+		System.out.println(universObservable.toString()+"\n");
 		
 	}
 	
