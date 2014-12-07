@@ -24,10 +24,33 @@ public class Mouton extends Animal{
 	}
 
 	@Override
-	public Animal seReproduire(Animal partenaire) {
+	protected Animal seReproduire(Animal partenaire) {
 		// TODO générer un nouvel animal
-			throw new UnsupportedOperationException("TODO : faire la reproduction du mouton");
-		//return null;
+			//throw new UnsupportedOperationException("TODO : faire la reproduction du mouton");
+
+		
+		if(partenaire instanceof Mouton){
+
+			int select_sexe = (int)(Math.random()*2 +1);
+			Sexe s;
+			
+			// On selectionne le sexe;
+			if(select_sexe == 1)
+				s = Sexe.Male;
+			else
+				s = Sexe.Femelle;
+			
+			try{
+
+				return new Mouton(this.getRect(), this.symbole(), duree_existence, s, duree_survie);
+
+			}catch (Exception e) {
+
+				e.printStackTrace();
+			}
+		}
+
+		return null;
 	}
 
 	@Override

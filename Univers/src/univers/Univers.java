@@ -104,6 +104,9 @@ public class Univers implements Observable {
 		// Position aléatoire
 		int xAlea;
 		int yAlea;
+		int select_sexe;
+
+		Sexe s;
 
 		// On place les moutons
 		for(int i = 1; i <= nbMouton;i++){
@@ -115,11 +118,19 @@ public class Univers implements Observable {
 
 			}while(plateau[xAlea][yAlea].getMatierDansCase() != null);
 
+			//Selection aléatoire du sexe
+			select_sexe = (int)(Math.random()*2 +1);
+
+			if(select_sexe == 1)
+				s = Sexe.Male;
+			else
+				s = Sexe.Femelle;
+			
 
 			// Ajout de la nouvelle instance de l'animal dans l'ArrayList
 			try {
 
-				Mouton m = new Mouton(new Rectangle(xAlea, yAlea, 1, 1), "M", 50, Sexe.Femelle, 5);
+				Mouton m = new Mouton(new Rectangle(xAlea, yAlea, 1, 1), "M", 50, s, 5);
 				m.ajoutObservateur(new ObsMouton(m));
 		
 				this.ajouter(m); 
@@ -128,7 +139,7 @@ public class Univers implements Observable {
 			} catch (Exception e) {
 
 				e.printStackTrace();
-				}
+			}
 			
 		}
 
@@ -141,6 +152,14 @@ public class Univers implements Observable {
 			yAlea = (int)(Math.random()*this.hauteur);
 
 			}while(plateau[xAlea][yAlea].getMatierDansCase() != null);
+			
+			//Selection aléatoire du sexe
+			select_sexe = (int)(Math.random()*2 +1);
+
+			if(select_sexe == 1)
+				s = Sexe.Male;
+			else
+				s = Sexe.Femelle;
 
 			// Ajout de la nouvelle instance de l'animal dans l'ArrayList
 			try {
@@ -197,8 +216,6 @@ public class Univers implements Observable {
 				matieres.get(i).evoluerDans(this.plateau);
 			}
 
-			/*if(Debug.DEBUG_UNIVERS)
-				System.out.println(this.toString());*/
 
 			this.recupererNouvMatieres();
 			this.supprimerMorts();	// On supprime les morts
@@ -209,8 +226,7 @@ public class Univers implements Observable {
 			this.notifierObs();
 
 		}
-		
-		//this.notifierObs();
+
 	}
 
 	private void recupererNouvMatieres(){

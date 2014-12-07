@@ -33,7 +33,7 @@ public class Loup extends Animal implements Carnivore{
 
 
 	@Override
-	public Animal seReproduire(Animal partenaire) {
+	protected Animal seReproduire(Animal partenaire) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("TODO : faire la reproduction du loup");
 		//return null;

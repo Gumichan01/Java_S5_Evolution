@@ -63,7 +63,10 @@ public class Entite {
 		return symbole;
 	}
 	
-	
+	/*
+	 * Renvoie une copie de rect avec les attributs du rect de l'entité courante
+	 * NB : Cela evite aux classes utilisatrices de modifier le Rectangle de la classe cible
+	 */
 	public final Rectangle getRect(){
 
 		return new Rectangle(this.rect);

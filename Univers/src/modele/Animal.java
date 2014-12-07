@@ -43,7 +43,7 @@ public abstract class Animal extends Matiere{
 		
 	}
 	
-	public abstract Animal seReproduire(Animal partenaire);
+	protected abstract Animal seReproduire(Animal partenaire);
 	protected abstract boolean placerPetitDans(Animal petit, Case [][] env);
 	
 	
@@ -235,9 +235,9 @@ public abstract class Animal extends Matiere{
 	/**
 	 * Fait le deplacement proprement dit
 	 * 
-	 * @param dx 
-	 * @param dy
-	 * @param env
+	 * @param dx Le déplacement en X
+	 * @param dy Le déplacement en Y
+	 * @param env L'environnement dans lequel on évolue
 	 * 
 	 * TODO gérer les deplacements en diagonal
 	 */
@@ -285,7 +285,6 @@ public abstract class Animal extends Matiere{
 	
 	
 	public void meurt(Mort type_mort){
-		
 		
 		this.estVivant = false;
 		
