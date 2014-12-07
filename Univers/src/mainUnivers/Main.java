@@ -28,7 +28,7 @@ public class Main {
 		
 		try {
 			
-			u = new Univers(42,16,420,0);
+			u = new Univers(32,16,256,32);
 			u.evoluer();
 			
 			

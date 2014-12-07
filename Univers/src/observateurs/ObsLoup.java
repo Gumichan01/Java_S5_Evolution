@@ -20,7 +20,12 @@ public class ObsLoup extends Vue_console implements Observateur{
 		char ligne = (char) ('A' + loupObservable.getRect().y);
 		int colonne = loupObservable.getRect().x +1;
 		
-		if(loupObservable.getEtatMort()==Mort.Faim){
+		
+		if(loupObservable.getAge() == 0){
+			// Il vient de naître
+			this.afficherConsole("["+ligne+colonne+"] : Un louveteau vient de naître");
+		}
+		else if(loupObservable.getEtatMort()==Mort.Faim){
 			
 			this.afficherConsole("["+ligne+colonne+"] : Un loup meurt de faim");
 		}

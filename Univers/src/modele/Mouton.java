@@ -23,8 +23,6 @@ public class Mouton extends Animal{
 
 	@Override
 	protected Animal seReproduire(Animal partenaire) {
-		// TODO générer un nouvel animal
-			//throw new UnsupportedOperationException("TODO : faire la reproduction du mouton");
 		
 		if(partenaire instanceof Mouton){
 
@@ -51,107 +49,6 @@ public class Mouton extends Animal{
 
 		return null;
 	}
-
-	@Override
-	protected boolean placerPetitDans(Animal petit, Case[][] env) {
-		// TODO Placer le petit sur une case, si possible; 
-		//throw new UnsupportedOperationException("TODO : faire le placement du petit");
-
-		int xDroiteAdj, xGaucheAdj; 	// La position du voisin à droite ou bien à gauche
-		int yHautAdj, yBasAdj;			// La position du voisin en haut ou bien en bas
-		
-		// Debut du code identique à voisinAproximité
-		if((this.rect.x + 1) == env.length)
-			xDroiteAdj = 0;
-		else
-			xDroiteAdj = this.rect.x + 1; 
-
-		if((this.rect.x - 1) < 0)
-			xGaucheAdj = env.length - 1;
-		else
-			xGaucheAdj = this.rect.x - 1;
-
-
-		if((this.rect.y + 1) >= env[this.rect.x].length)
-			yBasAdj = 0;
-		else
-			yBasAdj = this.rect.y + 1;
-
-
-		if((this.rect.y - 1) < 0)
-			yHautAdj = env[this.rect.x].length - 1;
-		else
-			yHautAdj = this.rect.y - 1;
-
-		// On met le rect de petit à null;
-		petit.rect = null;
-		
-		/*Si on trouve une case libre où mettre le petit 
-		 * 1 -> on réinitialise le rectangle 
-		 * 2 ->  on met le petit sur la case
-		 * 3 -> On previent les observateurs */
-		if(env[xGaucheAdj][this.rect.y].getMatierDansCase() == null){
-			
-			petit.rect = new Rectangle(xGaucheAdj,this.rect.y,Entite.WIDTH, Entite.HEIGHT);
-			env[xGaucheAdj][this.rect.y].setNewMatiere(petit);
-			petit.notifierObs();
-			return true;
-		}
-		else if(env[xGaucheAdj][yHautAdj].getMatierDansCase() == null){
-			
-			petit.rect = new Rectangle(xGaucheAdj,yHautAdj,Entite.WIDTH, Entite.HEIGHT);
-			env[xGaucheAdj][yHautAdj].setNewMatiere(petit);
-			petit.notifierObs();
-			return true;
-		}
-		else if(env[this.rect.x][yHautAdj].getMatierDansCase() == null){
-			
-			petit.rect = new Rectangle(this.rect.x,yHautAdj,Entite.WIDTH, Entite.HEIGHT);
-			env[this.rect.x][yHautAdj].setNewMatiere(petit);
-			petit.notifierObs();
-			return true;
-		}
-		else if(env[xDroiteAdj][yHautAdj].getMatierDansCase() == null){
-			
-			petit.rect = new Rectangle(xDroiteAdj,yHautAdj,Entite.WIDTH, Entite.HEIGHT);
-			env[xDroiteAdj][yHautAdj].setNewMatiere(petit);
-			petit.notifierObs();
-			return true;
-		}
-		else if(env[xDroiteAdj][this.rect.y].getMatierDansCase() == null){
-			
-			petit.rect = new Rectangle(xDroiteAdj,this.rect.y,Entite.WIDTH, Entite.HEIGHT);
-			env[xDroiteAdj][this.rect.y].setNewMatiere(petit);
-			petit.notifierObs();
-			return true;
-		}
-		else if(env[xDroiteAdj][yBasAdj].getMatierDansCase() == null){
-			
-			petit.rect = new Rectangle(xDroiteAdj,yBasAdj,Entite.WIDTH, Entite.HEIGHT);
-			env[xDroiteAdj][yBasAdj].setNewMatiere(petit);
-			petit.notifierObs();
-			return true;
-
-		}
-		else if(env[this.rect.x][yBasAdj].getMatierDansCase() == null){
-			
-			petit.rect = new Rectangle(this.rect.x,yBasAdj,Entite.WIDTH, Entite.HEIGHT);
-			env[this.rect.x][yBasAdj].setNewMatiere(petit);
-			petit.notifierObs();
-			return true;
-		}
-		else if(env[xGaucheAdj][yBasAdj].getMatierDansCase() == null){ 
-			
-			petit.rect = new Rectangle(xGaucheAdj,yBasAdj,Entite.WIDTH, Entite.HEIGHT);
-			env[xGaucheAdj][yBasAdj].setNewMatiere(petit);
-			petit.notifierObs();
-			return true;
-		}
-		
-		// Il n'y a pas de case disponible -> Le petit ne naît pas
-		return false;
-	}
-	
 	
 	
 	@Override
@@ -175,7 +72,7 @@ public class Mouton extends Animal{
 
 					if( this.sexe != partenaire.sexe){
 
-						// Il sont de sexe différent, ne sont-t-il pas déjà en pleine reproduction ?
+						// Il sont de sexe différent, ne sont-t-il pas déjà en reproduction ?
 						if( !this.enReproduction && !partenaire.enReproduction){
 
 							// Ils peuvent se reproduire entre eux
@@ -187,9 +84,6 @@ public class Mouton extends Animal{
 							// On teste juste si les deux sont en reproduction, si ce n'est pas le cas on ne fait rien 
 							if(this.enReproduction && partenaire.enReproduction){
 								// Ils se reproduisent
-
-								// Le mouton avertit les observateurs
-								//this.notifierObs();
 
 								// Qui va faire la gestation
 								if(this.sexe == Sexe.Femelle){
@@ -205,6 +99,7 @@ public class Mouton extends Animal{
 								partenaire.enReproduction = false;
 	
 							}
+
 
 						}
 
@@ -226,7 +121,7 @@ public class Mouton extends Animal{
 			}
 			else{
 				
-				if(!this.meurtVieillesse && !this.meurtFaim)
+				if(!this.meurtVieillesse && !this.meurtFaim && !enReproduction)
 						super.evoluerDans(env);
 			}
 			

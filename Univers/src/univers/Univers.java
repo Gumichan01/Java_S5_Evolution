@@ -164,7 +164,7 @@ public class Univers implements Observable {
 			// Ajout de la nouvelle instance de l'animal dans l'ArrayList
 			try {
 				
-				Loup loup = new Loup(new Rectangle(xAlea, yAlea, Entite.WIDTH, Entite.HEIGHT),"L", 60, Sexe.Femelle, 10); 
+				Loup loup = new Loup(new Rectangle(xAlea, yAlea, Entite.WIDTH, Entite.HEIGHT),"L", 60, s, 10); 
 				loup.ajoutObservateur(new ObsLoup(loup));
 				
 				this.ajouter(loup);

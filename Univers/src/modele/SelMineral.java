@@ -46,8 +46,7 @@ public class SelMineral extends Matiere{
 	@Override
 	public void evoluerDans(Case [][] env) {
 		
-		//if(env[this.rect.x][this.rect.y] == null)	// Si la case était vide, c'est pas normal, mais pas grave
-			env[this.rect.x][this.rect.y].setNewMatiere(this);
+		env[this.rect.x][this.rect.y].setNewMatiere(this);
 		
 		this.compteur += 1;
 		
