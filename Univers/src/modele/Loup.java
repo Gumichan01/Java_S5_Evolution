@@ -39,6 +39,12 @@ public class Loup extends Animal implements Carnivore{
 		//return null;
 	}
 
+	@Override
+	protected boolean placerPetitDans(Animal petit, Case[][] env) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
 	
 	@Override
 	public void evoluerDans(Case [][] env) {
@@ -85,6 +91,7 @@ public class Loup extends Animal implements Carnivore{
 		}
 
 	}
+
 
 }
 

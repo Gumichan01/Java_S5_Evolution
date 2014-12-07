@@ -222,8 +222,11 @@ public class Univers implements Observable {
 				if(tmp instanceof SelMineral)
 					ajouter(tmp);
 				else if(tmp instanceof Animal && !this.matieres.contains(tmp)){ 
+					
 					// On a un nouvel animal qui vient de naitre;
-					System.out.println("EVENT : Un animal vient de naitre ");
+					if(Debug.DEBUG_UNIVERS)
+						System.out.println("DEBUG : Un animal vient de naitre ");
+					
 					this.matieres.add(tmp);
 				}
 					

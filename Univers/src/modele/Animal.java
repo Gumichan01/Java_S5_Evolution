@@ -44,6 +44,8 @@ public abstract class Animal extends Matiere{
 	}
 	
 	public abstract Animal seReproduire(Animal partenaire);
+	protected abstract boolean placerPetitDans(Animal petit, Case [][] env);
+	
 	
 	/**
 	 * On vérifie si l'animal courant a un voisin
