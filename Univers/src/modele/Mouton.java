@@ -4,8 +4,6 @@ import java.awt.Rectangle;
 
 import observateurs.ObsMouton;
 import observateurs.ObsSelMineraux;
-import observateurs.Observable;
-import observateurs.Observateur;
 
 import univers.Case;
 import univers.Nourriture;
@@ -27,7 +25,6 @@ public class Mouton extends Animal{
 	protected Animal seReproduire(Animal partenaire) {
 		// TODO générer un nouvel animal
 			//throw new UnsupportedOperationException("TODO : faire la reproduction du mouton");
-
 		
 		if(partenaire instanceof Mouton){
 
@@ -42,7 +39,9 @@ public class Mouton extends Animal{
 			
 			try{
 
-				return new Mouton(this.getRect(), this.symbole(), duree_existence, s, duree_survie);
+				Mouton petit = new Mouton(new Rectangle(Entite.WIDTH, Entite.HEIGHT) , this.symbole(), duree_existence, s, duree_survie);
+				petit.ajoutObservateur(new ObsMouton(petit));
+				return petit;
 
 			}catch (Exception e) {
 
@@ -56,9 +55,103 @@ public class Mouton extends Animal{
 	@Override
 	protected boolean placerPetitDans(Animal petit, Case[][] env) {
 		// TODO Placer le petit sur une case, si possible; 
-		throw new UnsupportedOperationException("TODO : faire le placement du petit");
-		//return false;
+		//throw new UnsupportedOperationException("TODO : faire le placement du petit");
+
+		int xDroiteAdj, xGaucheAdj; 	// La position du voisin à droite ou bien à gauche
+		int yHautAdj, yBasAdj;			// La position du voisin en haut ou bien en bas
+		
+		// Debut du code identique à voisinAproximité
+		if((this.rect.x + 1) == env.length)
+			xDroiteAdj = 0;
+		else
+			xDroiteAdj = this.rect.x + 1; 
+
+		if((this.rect.x - 1) < 0)
+			xGaucheAdj = env.length - 1;
+		else
+			xGaucheAdj = this.rect.x - 1;
+
+
+		if((this.rect.y + 1) >= env[this.rect.x].length)
+			yBasAdj = 0;
+		else
+			yBasAdj = this.rect.y + 1;
+
+
+		if((this.rect.y - 1) < 0)
+			yHautAdj = env[this.rect.x].length - 1;
+		else
+			yHautAdj = this.rect.y - 1;
+
+		// On met le rect de petit à null;
+		petit.rect = null;
+		
+		/*Si on trouve une case libre où mettre le petit 
+		 * 1 -> on réinitialise le rectangle 
+		 * 2 ->  on met le petit sur la case
+		 * 3 -> On previent les observateurs */
+		if(env[xGaucheAdj][this.rect.y].getMatierDansCase() == null){
+			
+			petit.rect = new Rectangle(xGaucheAdj,this.rect.y,Entite.WIDTH, Entite.HEIGHT);
+			env[xGaucheAdj][this.rect.y].setNewMatiere(petit);
+			petit.notifierObs();
+			return true;
+		}
+		else if(env[xGaucheAdj][yHautAdj].getMatierDansCase() == null){
+			
+			petit.rect = new Rectangle(xGaucheAdj,yHautAdj,Entite.WIDTH, Entite.HEIGHT);
+			env[xGaucheAdj][yHautAdj].setNewMatiere(petit);
+			petit.notifierObs();
+			return true;
+		}
+		else if(env[this.rect.x][yHautAdj].getMatierDansCase() == null){
+			
+			petit.rect = new Rectangle(this.rect.x,yHautAdj,Entite.WIDTH, Entite.HEIGHT);
+			env[this.rect.x][yHautAdj].setNewMatiere(petit);
+			petit.notifierObs();
+			return true;
+		}
+		else if(env[xDroiteAdj][yHautAdj].getMatierDansCase() == null){
+			
+			petit.rect = new Rectangle(xDroiteAdj,yHautAdj,Entite.WIDTH, Entite.HEIGHT);
+			env[xDroiteAdj][yHautAdj].setNewMatiere(petit);
+			petit.notifierObs();
+			return true;
+		}
+		else if(env[xDroiteAdj][this.rect.y].getMatierDansCase() == null){
+			
+			petit.rect = new Rectangle(xDroiteAdj,this.rect.y,Entite.WIDTH, Entite.HEIGHT);
+			env[xDroiteAdj][this.rect.y].setNewMatiere(petit);
+			petit.notifierObs();
+			return true;
+		}
+		else if(env[xDroiteAdj][yBasAdj].getMatierDansCase() == null){
+			
+			petit.rect = new Rectangle(xDroiteAdj,yBasAdj,Entite.WIDTH, Entite.HEIGHT);
+			env[xDroiteAdj][yBasAdj].setNewMatiere(petit);
+			petit.notifierObs();
+			return true;
+
+		}
+		else if(env[this.rect.x][yBasAdj].getMatierDansCase() == null){
+			
+			petit.rect = new Rectangle(this.rect.x,yBasAdj,Entite.WIDTH, Entite.HEIGHT);
+			env[this.rect.x][yBasAdj].setNewMatiere(petit);
+			petit.notifierObs();
+			return true;
+		}
+		else if(env[xGaucheAdj][yBasAdj].getMatierDansCase() == null){ 
+			
+			petit.rect = new Rectangle(xGaucheAdj,yBasAdj,Entite.WIDTH, Entite.HEIGHT);
+			env[xGaucheAdj][yBasAdj].setNewMatiere(petit);
+			petit.notifierObs();
+			return true;
+		}
+		
+		// Il n'y a pas de case disponible -> Le petit ne naît pas
+		return false;
 	}
+	
 	
 	
 	@Override
@@ -80,7 +173,7 @@ public class Mouton extends Animal{
 					// C'est un mouton, peut-il se reproduire avec ?
 					Mouton partenaire = (Mouton) env[r.x][r.y].getMatierDansCase(); 
 
-					if( this.sexe != partenaire.sexe){	// TODO attention : ce bloc ne doit pas être executé pour le moment
+					if( this.sexe != partenaire.sexe){
 
 						// Il sont de sexe différent, ne sont-t-il pas déjà en pleine reproduction ?
 						if( !this.enReproduction && !partenaire.enReproduction){
@@ -115,13 +208,6 @@ public class Mouton extends Animal{
 
 						}
 
-
-
-
-					}
-					else{
-						
-						
 					}
 					
 				}
@@ -140,7 +226,8 @@ public class Mouton extends Animal{
 			}
 			else{
 				
-				super.evoluerDans(env);
+				if(!this.meurtVieillesse && !this.meurtFaim)
+						super.evoluerDans(env);
 			}
 			
 		}
@@ -150,17 +237,21 @@ public class Mouton extends Animal{
 			if(this.meurtFaim || this.meurtVieillesse){
 				int x = this.rect.x;
 				int y = this.rect.y;
-				
+
 				try {
 					// La case est-elle depourvue de quoi que ce soit ?
 					if(env[x][y].getNourriture() == Nourriture.Rien ){
 						
 						SelMineral sel = new SelMineral(this.getRect());
 						sel.ajoutObservateur(new ObsSelMineraux(sel));
-						
+
 						env[x][y].setNewMatiere(sel);
 					}
+					/*else
+						env[x][y].setNewMatiere(null); // La case devient inoccupée*/
+						
 				}catch(Exception e){
+					System.out.println("EXCEPTION");
 					env[x][y].setNewMatiere(null);
 				}
 			}
@@ -169,6 +260,5 @@ public class Mouton extends Animal{
 
 
 	}
-
 
 }

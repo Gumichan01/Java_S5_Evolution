@@ -55,12 +55,12 @@ public class Vue_console implements Vue{
 	}
 
 	/**
-	 * Affiche une phrase relative la mort de l'animal
+	 * Affiche une phrase
 	 * 
 	 * @param s La chaine à afficher
 	 */
 	@Override
-	public void afficherMort(String s) {
+	public void afficherConsole(String s) {
 		
 		System.out.println(s);
 		

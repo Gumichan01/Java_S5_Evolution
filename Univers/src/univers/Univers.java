@@ -2,7 +2,7 @@ package univers;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.LinkedList;
+//import java.util.LinkedList;
 
 import observateurs.ObsLoup;
 import observateurs.ObsMouton;
@@ -10,10 +10,8 @@ import observateurs.ObsUnivers;
 import observateurs.Observable;
 import observateurs.Observateur;
 
-import vue.Vue;
-
 import modele.Animal;
-import modele.Debug;
+import modele.Entite;
 import modele.Loup;
 import modele.Matiere;
 import modele.Mouton;
@@ -41,13 +39,15 @@ public class Univers implements Observable {
 	private int largeur; 	// largeur de l'univers, 999 max
 	private int hauteur;	// hauteur de l'univers, 26 max
 
+	// boolean ajoutAnimal = false;
+	
 	private int tour = 0;
 
-	private Case [][] plateau;	// Le plateau sur lequelle mettre les matières, une case vaut null si aucune matière n'est présente
+	private Case [][] plateau;	// Le plateau sur lequel mettre les matières
 
 	private ArrayList<Matiere> matieres;	// La liste de matières qui évolueront (SelMineral, Animuax,...)
 	private ArrayList<Observateur> liste_observateurs;
-	//private LinkedList<Animal> file;
+	//private LinkedList<Animal> file;		// La liste des animaux en trop
 
 	public Univers(int l, int h, int nbMouton, int nbLoup) 
 		throws ValeurNegativeException, DimensionNonValideException{
@@ -130,7 +130,7 @@ public class Univers implements Observable {
 			// Ajout de la nouvelle instance de l'animal dans l'ArrayList
 			try {
 
-				Mouton m = new Mouton(new Rectangle(xAlea, yAlea, 1, 1), "M", 50, s, 5);
+				Mouton m = new Mouton(new Rectangle(xAlea, yAlea, Entite.WIDTH, Entite.HEIGHT), "M", 50, s, 5);
 				m.ajoutObservateur(new ObsMouton(m));
 		
 				this.ajouter(m); 
@@ -164,7 +164,7 @@ public class Univers implements Observable {
 			// Ajout de la nouvelle instance de l'animal dans l'ArrayList
 			try {
 				
-				Loup loup = new Loup(new Rectangle(xAlea, yAlea, 1, 1),"L", 60, Sexe.Femelle, 10); 
+				Loup loup = new Loup(new Rectangle(xAlea, yAlea, Entite.WIDTH, Entite.HEIGHT),"L", 60, Sexe.Femelle, 10); 
 				loup.ajoutObservateur(new ObsLoup(loup));
 				
 				this.ajouter(loup);
@@ -214,6 +214,7 @@ public class Univers implements Observable {
 			for(int i = 0;i < matieres.size();i++){
 
 				matieres.get(i).evoluerDans(this.plateau);
+
 			}
 
 
@@ -235,9 +236,15 @@ public class Univers implements Observable {
 			for(int l = 0; l < this.hauteur; l++){
 
 				Matiere tmp = plateau[c][l].getMatierDansCase();
-				
+
+				if(!this.matieres.contains(tmp)){
+					// On récupère les sels minéraux ou bien un nouvel animal qui vient de naitre
+					if( tmp instanceof SelMineral || tmp instanceof Animal)
+						ajouter(tmp);
+				}
+
 				// On récupère les sels minéraux
-				if(tmp instanceof SelMineral)
+				/*if(tmp instanceof SelMineral && !this.matieres.contains(tmp))
 					ajouter(tmp);
 				else if(tmp instanceof Animal && !this.matieres.contains(tmp)){ 
 					
@@ -246,9 +253,8 @@ public class Univers implements Observable {
 						System.out.println("DEBUG : Un animal vient de naitre ");
 					
 					this.matieres.add(tmp);
-				}
-					
-				
+				}*/
+
 			}	
 		}
 	}
@@ -259,11 +265,14 @@ public class Univers implements Observable {
 		for(int i = 0; i < this.matieres.size();i++){
 			if(!this.matieres.get(i).vivant()){
 				
-				// On met l'emplacement du mort à null
-				plateau[this.matieres.get(i).getRect().x][this.matieres.get(i).getRect().y].setNewMatiere(null);
+				// On met l'emplacement du mort à null sauf s'il a disparu de lui-même
+				if(this.matieres.get(i).equals(plateau[this.matieres.get(i).getRect().x][this.matieres.get(i).getRect().y].getMatierDansCase())){
+				
+					plateau[this.matieres.get(i).getRect().x][this.matieres.get(i).getRect().y].setNewMatiere(null);
+				}
 				
 				this.matieres.remove(i);	// On le supprime
-				i--;	// On décrémente i à cause du décalage vers la gauche
+				i--;	// On décrémente i à cause du décalage des éléments de la liste vers la gauche
 			}
 		}
 	}

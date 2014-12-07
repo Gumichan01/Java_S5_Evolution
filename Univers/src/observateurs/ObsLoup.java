@@ -22,15 +22,15 @@ public class ObsLoup extends Vue_console implements Observateur{
 		
 		if(loupObservable.getEtatMort()==Mort.Faim){
 			
-			this.afficherMort("["+ligne+colonne+"] : Un loup meurt de faim");
+			this.afficherConsole("["+ligne+colonne+"] : Un loup meurt de faim");
 		}
 		else if(loupObservable.getEtatMort()==Mort.Mange){
 			
-			this.afficherMort("["+ligne+colonne+"] : Un loup a servi de repas");
+			this.afficherConsole("["+ligne+colonne+"] : Un loup a servi de repas");
 		}
 		else{
 			
-			this.afficherMort("["+ligne+colonne+"] : Un loup meurt de vieillesse");
+			this.afficherConsole("["+ligne+colonne+"] : Un loup meurt de vieillesse");
 		}
 		
 	}

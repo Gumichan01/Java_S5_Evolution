@@ -1,6 +1,5 @@
 package observateurs;
 
-import modele.Matiere;
 import univers.Case;
 import univers.Univers;
 import vue.Vue_console;
@@ -18,7 +17,6 @@ public class ObsUnivers extends Vue_console implements Observateur{
 
 	@Override
 	public void notifier() {
-		// TODO Auto-generated method stub
 		
 		Case [][] plateau = universObservable.getPlateau();
 		

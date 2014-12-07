@@ -1,11 +1,7 @@
 package mainUnivers;
 
-import observateurs.ObsUnivers;
 import modele.Debug;
 import univers.Univers;
-import vue.Vue;
-import vue.Vue_console;
-import exceptionUnivers.ValeurNegativeException;
 
 
 
@@ -32,7 +28,7 @@ public class Main {
 		
 		try {
 			
-			u = new Univers(32, 8, 32, 8);
+			u = new Univers(42,16,420,0);
 			u.evoluer();
 			
 			

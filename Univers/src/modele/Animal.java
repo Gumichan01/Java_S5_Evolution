@@ -58,11 +58,6 @@ public abstract class Animal extends Matiere{
 
 		int xDroiteAdj, xGaucheAdj; 	// La position du voisin à droite ou bien à gauche
 		int yHautAdj, yBasAdj;			// La position du voisin d'en haut ou bien en bas
-		int xProie, yProie;
-		
-		// On met à -1 pour indiquer qu'on n'a pas de voisin
-		xProie = -1;
-		yProie = -1;
 		
 		
 		/*	Dans un premier temps, on va stocker les coordonnées des cases adjacentes
@@ -114,68 +109,60 @@ public abstract class Animal extends Matiere{
 			yHautAdj = this.rect.y - 1;
 		}
 		
-		// Proie à gauche
+
 		if(env[xGaucheAdj][this.rect.y].getMatierDansCase() instanceof Animal){
 			
-			// Proie à gauche
-			xProie = xGaucheAdj;
-			yProie = this.rect.y;
-
+			// Voisin à gauche
+			return new Rectangle(xGaucheAdj,this.rect.y,0,0);
 		}
 		else if(env[xGaucheAdj][yHautAdj].getMatierDansCase() instanceof Animal){
 			
-			// Proie en haut à gauche
-			xProie = xGaucheAdj;
-			yProie = yHautAdj;
-
+			// Voisin en haut à gauche
+			return new Rectangle(xGaucheAdj,yHautAdj,0,0);
 		}
 		else if(env[this.rect.x][yHautAdj].getMatierDansCase() instanceof Animal){
 			
-			// Proie en haut
-			xProie = this.rect.x;
-			yProie = yHautAdj;
-
+			// Voisin en haut
+			return new Rectangle(this.rect.x,yHautAdj,0,0);
 		}
 		else if(env[xDroiteAdj][yHautAdj].getMatierDansCase() instanceof Animal){
 			
-			// Proie en haut à droite
-			xProie = xDroiteAdj;
-			yProie = yHautAdj;
-
+			// Voisin en haut à droite
+			return new Rectangle(xDroiteAdj,yHautAdj,0,0);
 		}
 		else if(env[xDroiteAdj][this.rect.y].getMatierDansCase() instanceof Animal){
 			
-			// Proie à droite
-			xProie = xDroiteAdj;
-			yProie = this.rect.y;
-
+			// Voisin à droite
+			return new Rectangle(xDroiteAdj,this.rect.y,0,0);
 		}
 		else if(env[xDroiteAdj][yBasAdj].getMatierDansCase() instanceof Animal){
 			
-			// Proie en bas à droite
-			xProie = xDroiteAdj;
-			yProie = yBasAdj;
+			// Voisin en bas à droite
+			return new Rectangle(xDroiteAdj,yBasAdj,0,0);
 
 		}
 		else if(env[this.rect.x][yBasAdj].getMatierDansCase() instanceof Animal){
 			
-			// Proie en bas
-			xProie = this.rect.x;
-			yProie = yBasAdj;
-			
+			// Voisin en bas
+			return new Rectangle(this.rect.x,yBasAdj,0,0);
 		}
 		else if(env[xGaucheAdj][yBasAdj].getMatierDansCase() instanceof Animal){ 
 			
-			xProie = xGaucheAdj;
-			yProie = yBasAdj;
+			// Voisin en bas à gauche
+			return new Rectangle(xGaucheAdj,yBasAdj,0,0);
 		}
 		
-		// Après avoir fait tous ces tests, a-t-on trouvé un voisin ?
-		return ( (xProie == -1) && (yProie == -1) ) ? null: new Rectangle(xProie,yProie,0,0);
+		// Aucun voisin -> null
+		return null;
 
 	}
 
 	protected void grandir(){
+
+		this.age++;
+		this.compt_survie++;
+		
+		//System.out.println("Age : "+age+ "compt_survie : "+compt_survie);
 		
 		// Si on depasse l'espérance de vie
 		if(age > duree_existence){	
@@ -186,12 +173,16 @@ public abstract class Animal extends Matiere{
 			// On meurt de faim
 			this.meurt(Mort.Faim);
 		}
-		else{
-			// Pas de problème
-			age++;
+		else if(age == duree_existence){
+			meurtVieillesse = true;
+			this.notifierObs();
+		}
+		else if(compt_survie == duree_survie){
+			meurtFaim = true;
+			this.notifierObs();
 		}
 
-		compt_survie++;
+
 	}
 
 
@@ -290,11 +281,12 @@ public abstract class Animal extends Matiere{
 		
 		switch(type_mort){
 		
-			case Faim : meurtFaim = true; 
+			case Faim : meurtFaim = true;
 						break;
 						
-			case Mange : meurtMange = true;
-						break;
+			case Mange : meurtMange = true; meurtVieillesse = false; meurtFaim = false;
+						 this.notifierObs();
+						 break;
 						
 			case Naturel : 	meurtVieillesse = true;
 							break;
@@ -305,10 +297,15 @@ public abstract class Animal extends Matiere{
 
 			
 		// Prévenir les observateurs
-		this.notifierObs();
+		//this.notifierObs();
 
 	}
 	
+	/**
+	 * Retourne l'etat de mort de l'animal qui est mort
+	 * 
+	 * @return L'etat de mort de l'animal
+	 */
 	public Mort getEtatMort(){
 		
 		if(meurtFaim){

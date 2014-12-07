@@ -29,7 +29,6 @@ import exceptionUnivers.ValeurNegativeException;
  */
 public abstract class Matiere extends Entite implements Observable {
 
-	// TODO implements Observable
 	
 	protected ArrayList<Observateur> observateurs;
 	protected int duree_existence;

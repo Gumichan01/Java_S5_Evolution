@@ -21,7 +21,7 @@ public class ObsSelMineraux extends Vue_console implements Observateur{
 		char ligne = (char) ('A' + selMineralObservable.getRect().y);
 		int colonne = selMineralObservable.getRect().x +1;
 		
-		this.afficherMort("["+ligne+colonne+"] : De l'herbe repousse");
+		this.afficherConsole("["+ligne+colonne+"] : De l'herbe repousse");
 		
 	}
 

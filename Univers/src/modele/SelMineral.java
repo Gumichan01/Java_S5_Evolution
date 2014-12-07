@@ -53,9 +53,11 @@ public class SelMineral extends Matiere{
 		
 		if(this.compteur == this.duree_existence)	
 			this.notifierObs();						// On previent les observateurs de la fin de l'existence
-		else if(this.compteur > duree_existence)
+		else if(this.compteur > duree_existence){
+			
+			env[this.rect.x][this.rect.y].setNewMatiere(null);
 			env[this.rect.x][this.rect.y].setNourriture(Nourriture.Herbe);	// L'herbe repousse
-		
+		}
 	}
 
 	@Override

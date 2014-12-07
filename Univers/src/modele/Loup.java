@@ -3,7 +3,6 @@ package modele;
 import java.awt.Rectangle;
 
 import observateurs.ObsSelMineraux;
-import observateurs.Observateur;
 
 import univers.Case;
 import univers.Nourriture;
@@ -26,9 +25,11 @@ public class Loup extends Animal implements Carnivore{
 	@Override
 	public void manger(Animal proie) {
 		
-		proie.meurt(Mort.Mange);
-		this.compt_survie = 0;	// On remet le compteur à 0 car le loup est rassasié
-		
+		if(proie.getAge() > 1){
+			
+			proie.meurt(Mort.Mange);
+			this.compt_survie = 0;	// On remet le compteur à 0 car le loup est rassasié
+		}
 	}
 
 
@@ -56,13 +57,23 @@ public class Loup extends Animal implements Carnivore{
 			Rectangle r = this.voisinAProximiteDans(env);	//
 			
 			if( r != null && env[r.x][r.y].getMatierDansCase() instanceof Mouton){
-				// On a une proie voisine à devorer
-				/* Pas très propre le cast, mais la méthode proieAProximiteDans() renvoie les coordonnées de l'animal qui fait office de proie
-				 * Içi c'est le mouton, mais cela est applicable à n'importe quelle autre animal qui peut être la proie d'un loup */
-				this.manger((Animal) env[r.x][r.y].getMatierDansCase());
+
+				/* Pas très propre le cast, mais la méthode getMatierDansCase() renvoie une matière au sens large
+				 * Dans le cas présent on a bien vérifier que c'est un animal, donc l'exécution de la fonction ne fera pas planter le programme
+				 */
+				this.manger((Animal) env[r.x][r.y].getMatierDansCase());	// On mange la proie
+				
+				/* On va se mettre à la position de la proie désormais dévorée*/
+				env[this.rect.x][this.rect.y].setNewMatiere(null);	// On n'occupe plus cette case
+				this.rect.x = r.x;	// On met à jour les coordonnées du loup
+				this.rect.y = r.y;
+				env[this.rect.x][this.rect.y].setNewMatiere(this);	// On prend la place de la proie
 			}
-			else
-				super.evoluerDans(env);
+			else{
+				
+				if(!this.meurtVieillesse && !this.meurtFaim)
+					super.evoluerDans(env);
+			}
 		}
 		else{
 			
@@ -81,6 +92,8 @@ public class Loup extends Animal implements Carnivore{
 						
 						env[x][y].setNewMatiere(sel);
 					}
+					/*else
+						env[x][y].setNewMatiere(null); // La case devient inoccupée*/
 					
 				}catch(Exception e){
 					// Il y a eu un problème, la case est inoccupé

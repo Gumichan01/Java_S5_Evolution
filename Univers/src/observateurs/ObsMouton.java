@@ -13,7 +13,6 @@ public class ObsMouton extends Vue_console implements Observateur{
 	public ObsMouton(Mouton m){
 		
 		this.moutonObservable = m;
-		
 	}
 	
 	
@@ -23,19 +22,27 @@ public class ObsMouton extends Vue_console implements Observateur{
 		char ligne = (char) ('A' + moutonObservable.getRect().y);
 		int colonne = moutonObservable.getRect().x +1;
 		
-		if(moutonObservable.getEtatMort()==Mort.Faim){
-			
-			this.afficherMort("["+ligne+colonne+"] : Un mouton meurt de faim");
-		}
-		else if(moutonObservable.getEtatMort()==Mort.Mange){
-			
-			this.afficherMort("["+ligne+colonne+"] : Un mouton a servi de repas");
+		if(moutonObservable.getAge() == 0){
+			// Il vient de naître
+			this.afficherConsole("["+ligne+colonne+"] :Un jeune mouton vient de naître");
 		}
 		else{
-			
-			this.afficherMort("["+ligne+colonne+"] : Un mouton meurt de vieillesse");
-		}
 		
+			// Le mouton est mort, comment ?
+			if(moutonObservable.getEtatMort()==Mort.Faim){
+				
+				this.afficherConsole("["+ligne+colonne+"] : Un mouton meurt de faim");
+			}
+			else if(moutonObservable.getEtatMort()==Mort.Mange){
+				
+				this.afficherConsole("["+ligne+colonne+"] : Un mouton a servi de repas");
+			}
+			else{
+				
+				this.afficherConsole("["+ligne+colonne+"] : Un mouton meurt de vieillesse");
+			}
+			
+		}
 	}
 
 }

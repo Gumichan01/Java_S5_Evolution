@@ -20,6 +20,9 @@ public class Entite {
 	protected Rectangle rect;	// Stocke les positions (x,y) et la taille (utile pour la partie graphique)
 	private String symbole;	/* Mouton : "M", Loup : "L", SelMineral : "S", ...  (ne doit être modifié par les classes filles) */
 
+	public static final int WIDTH = 32;
+	public static final int HEIGHT = 32;
+	
 	/**
 	 * Construit l'entité
 	 * @param newX la nouvelle position x
