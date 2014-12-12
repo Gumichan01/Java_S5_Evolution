@@ -24,7 +24,7 @@ public class Loup extends Animal implements Carnivore{
 		super(r, s, dureeDeVie, duree_survie, sexe);
 		
 	}
-	
+
 	@Override
 	public void manger(Animal proie) {
 		

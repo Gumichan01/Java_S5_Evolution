@@ -2,9 +2,10 @@ package mainUnivers;
 
 import javax.swing.JFrame;
 
+import controleur.CommandeGraphX;
+
 import modele.Debug;
 import univers.Univers;
-import vue.CommandeGraphX;
 import vue.Vue_graphique;
 
 
