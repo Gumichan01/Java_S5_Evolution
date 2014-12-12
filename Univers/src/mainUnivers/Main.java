@@ -1,7 +1,11 @@
 package mainUnivers;
 
+import javax.swing.JFrame;
+
 import modele.Debug;
 import univers.Univers;
+import vue.CommandeGraphX;
+import vue.Vue_graphique;
 
 
 
@@ -27,9 +31,12 @@ public class Main {
 		Univers u;
 		
 		try {
-			
-			u = new Univers(32,16,256,32);
-			u.evoluer();
+				// On crée une fenetre
+				CommandeGraphX cmdX =  new CommandeGraphX();
+				cmdX.afficherMenu();
+				
+			//u = new Univers(32,16,256,32);
+			//u.evoluer();
 			
 			
 		}catch(Exception e){

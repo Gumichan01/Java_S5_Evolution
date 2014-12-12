@@ -198,35 +198,32 @@ public class Univers implements Observable {
 
 	public void evoluer(){
 
-		while(nbAnimaux() > 0){
 
-			try{	// On laisse s'écouler 1 seconde entre chaque tour
-					// On le baissera sans doute à 500 millisecondes pour un grand nombre d'éléments
-				Thread.sleep(1000);
-				
-			}catch(InterruptedException e){
-				
-				e.printStackTrace();
-			}
-
-			tour++;
-
-			for(int i = 0;i < matieres.size();i++){
-
-				matieres.get(i).evoluerDans(this.plateau);
-
-			}
-
-
-			this.recupererNouvMatieres();
-			this.supprimerMorts();	// On supprime les morts
+		/*try{	// On laisse s'écouler 1 seconde entre chaque tour
+				// On le baissera sans doute à 500 millisecondes pour un grand nombre d'éléments
+			Thread.sleep(1000);
 			
-			// TODO tester si une case se libère, pour mettre les animaux en trop
-
-			// Appel de la vue (l'observateur)
-			this.notifierObs();
-
+		}catch(InterruptedException e){
+			
+			e.printStackTrace();
+		}*/
+	
+		tour++;
+	
+		for(int i = 0;i < matieres.size();i++){
+	
+			matieres.get(i).evoluerDans(this.plateau);
+	
 		}
+	
+	
+		this.recupererNouvMatieres();
+		this.supprimerMorts();	// On supprime les morts
+		
+		// TODO tester si une case se libère, pour mettre les animaux en trop
+	
+		// Appel de la vue (l'observateur)
+		this.notifierObs();
 
 	}
 
@@ -277,7 +274,7 @@ public class Univers implements Observable {
 		}
 	}
 
-	private int nbAnimaux(){
+	public int nbAnimaux(){
 		
 		int compt = 0;
 		
