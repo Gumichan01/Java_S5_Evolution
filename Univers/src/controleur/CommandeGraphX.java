@@ -26,13 +26,21 @@ import vue.Fenetre;
 import vue.Sprite;
 import vue.VueJeu;
 import vue.VueTelescripteur;
-import vue.Vue_graphique;
+
+
 
 public class CommandeGraphX {
 
+	public final static String GRAPHX_QUITTER = "Q";
+	public final static String GRAPHX_PAUSE = "P";
+	
+	
+	
+	
 	ControleurUnivers ctrl;
 	Fenetre fenetre;
-	VueJeu jeu;
+	VueJeu vueJeu;
+	Thread threadJeu;
 	
 	JButton jouerBouton;
 	
@@ -160,32 +168,40 @@ public class CommandeGraphX {
 	public void jouerPartie(){
 		
 		chargement();
-		//ctrl.jouer();
+		threadJeu = ctrl.new Jeu();
+		threadJeu.start();
+
 	}
 	
 	/**
 	 * Charge toutes les données nécessaires à l'éxecution de la partie
 	 */
 	private void chargement(){
-		//TODO Faire le chargement
+
 		
-		Fenetre telescripteur = new Fenetre(600, 100, 600, 200);
+		final Fenetre telescripteur = new Fenetre(600, 100, 600, 200);
 		
 		JMenuBar barre = new JMenuBar();
 		JButton boutonQuit = new JButton("Quitter");
 		JButton boutonPause = new JButton("Pause/Continuer");
 		
 		
-		//Ajouts des ActionListeners
+		boutonQuit.setActionCommand(GRAPHX_QUITTER);
+		boutonPause.setActionCommand("C");
+		
+		/* Ajouts des ActionListeners */
 		boutonQuit.addActionListener(new ActionListener() {
-			
+			// L'écouteur pour quitter le programme 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Fermer la fenetre
+				// TODO Auto-generated method stub
 				CommandeGraphX.this.fenetre.dispose();
+				telescripteur.dispose();
 				System.exit(0);
 			}
 		});
+		
+		boutonPause.addActionListener(ctrl);	// ctrl pour la pause
 		
 		// On ajoute les boutons dans la barre
 		barre.add(boutonQuit);
@@ -193,7 +209,7 @@ public class CommandeGraphX {
 		telescripteur.setJMenuBar(barre);
 
 		// On met en place la fenêtre de telescripteur
-		telescripteur.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		telescripteur.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		telescripteur.setTitle("Evolution - Telescripteur");
 		telescripteur.setResizable(true);
 		//telescripteur.setLayout(null);

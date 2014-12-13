@@ -1,12 +1,8 @@
 package mainUnivers;
 
-import javax.swing.JFrame;
-
 import controleur.CommandeGraphX;
-
 import modele.Debug;
-import univers.Univers;
-import vue.Vue_graphique;
+
 
 
 
@@ -23,34 +19,20 @@ public class Main {
 	/**
 	 * @param args Les paramètres positionnels ne servent à rien 
 	 */
-	public static void main(String[] args) throws Exception{
+	public static void main(String[] args){
 		// TODO Finir les autres @TODO avant de faire l'interface graphique
 		
-		if(Debug.DEBUG_UNIVERS)
-			System.out.println("Création de l'Univers");
-		
-		Univers u;
-		
-		try {
-				// On crée une fenetre
-				CommandeGraphX cmdX =  new CommandeGraphX();
-				cmdX.afficherMenu();
-				
-			//u = new Univers(32,16,256,32);
-			//u.evoluer();
+	if(Debug.DEBUG_UNIVERS)
+		System.out.println("Création de l'Univers");
+	
+	// On crée une fenetre
+	CommandeGraphX cmdX =  new CommandeGraphX();
+	cmdX.afficherMenu();
+	
+	if(Debug.DEBUG_UNIVERS)
+		System.out.println("Fin de l'Univers");			
 			
-			
-		}catch(Exception e){
-			
-			//System.out.println("Une erreur s'est produite : "+ e.getMessage());
-			e.printStackTrace();
-			
-		}finally{
-			
-			if(Debug.DEBUG_UNIVERS)
-				System.out.println("Fin de l'Univers");			
-			
-		}
+
 
 		
 	}

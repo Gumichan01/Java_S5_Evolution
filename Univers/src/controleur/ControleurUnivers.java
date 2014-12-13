@@ -40,6 +40,7 @@ public class ControleurUnivers implements ActionListener{
 		
 	}
 	
+	
 	public void jouer(){
 		
 		while(univers.nbAnimaux() > 0){
@@ -64,24 +65,37 @@ public class ControleurUnivers implements ActionListener{
 	/**
 	 * Mets en pause l'univers ou poursuit le jeu
 	 * 
-	 * @param pause True pour mettre en pause, False pour continuer
-	 * 
 	 */
-	public void pauseUnivers(boolean pause){
+	public void pauseUnivers(){
 		
-		if(pause && !enPause){
-			// TODO mettre en pause l'univers
+		if(!enPause){
+
 			enPause = true;
 		}
-		else if(enPause){
-			// TODO remettre l'univers là où il s'est arrêté
+		else{
+
 			enPause = false;
 		}
 		
 	}
 
 	/**
-	 * Récupère l'évenement et agit sur l'univers (mettre en pause, le sauvegarder ...)
+	 * 
+	 * @author luxon
+	 *
+	 */
+	public class Jeu extends Thread{
+		
+		@Override
+		public void run(){
+			
+			ControleurUnivers.this.jouer();
+		}
+	}
+	
+	
+	/**
+	 * Récupère l'évenement et agit sur l'univers (Mise en pause, dans le cas présent)
 	 * 
 	 * @param arg0 L'évenement cible
 	 * 
@@ -89,8 +103,8 @@ public class ControleurUnivers implements ActionListener{
 	@Override
 
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Gérer les action sur les différants boutons
-		throw new UnsupportedOperationException("TODO : Mettre l'univers en pause et continuer");
+
+			this.pauseUnivers();
 	}
 	
 	
