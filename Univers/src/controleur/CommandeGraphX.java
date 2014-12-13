@@ -1,14 +1,20 @@
 package controleur;
 
 
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -17,14 +23,19 @@ import exceptionUnivers.ValeurNegativeException;
 
 import univers.Univers;
 import vue.Fenetre;
+import vue.Sprite;
+import vue.VueJeu;
+import vue.VueTelescripteur;
+import vue.Vue_graphique;
 
 public class CommandeGraphX {
 
 	ControleurUnivers ctrl;
 	Fenetre fenetre;
-
+	VueJeu jeu;
 	
 	JButton jouerBouton;
+	
 	
 	// Les champs textes
 	final JTextField texte_nbM = new JTextField(10);
@@ -32,15 +43,58 @@ public class CommandeGraphX {
 	
 	final JTextField texte_l = new JTextField(10);
 	final JTextField texte_h = new JTextField(10);
-	
-	
+
+
 	/**
 	 *  Cronstruit le controleur de l'univers et la fenetre
 	 */
 	public CommandeGraphX(){
 
 		ctrl = new ControleurUnivers();
-		fenetre = new Fenetre();
+		fenetre = new Fenetre(200, 200,800, 600);
+		fenetre.setTitle("Evolution - Projet Java");
+		fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		fenetre.setVisible(true);
+	}
+
+
+	/**
+	 *  Créer une version "bufferisée" de l'image à partir du fichier
+	 *  dont le chemin est mis en paramètre
+	 *  
+	 * @param cheminFichier Le chemin (relatif ou absolu) du fichier
+	 * @return l'image qui a été mise en mémoire tampon
+	 * 
+	 */
+	public BufferedImage chargerImage(String cheminFichier){
+		
+		BufferedImage buf = null;
+		
+		try{
+
+			if(cheminFichier == null)	// Le chemin est invalide
+				throw new NullPointerException("Fichier non renseigné");
+			
+			buf = ImageIO.read(new File(cheminFichier));	// On essaie de lire le fichier
+			
+		}catch(NullPointerException ne){
+			
+			// Le paramètre est null
+			ne.printStackTrace();
+			throw ne;
+			
+		}
+		catch(IOException io){
+			
+			// On arrive pas à lire le fichier
+			io.printStackTrace();
+			throw new RuntimeException(io);
+			
+		}
+	
+		return buf;	// Il y a eu un problème si on est arrivé là
+		
 		
 	}
 	
@@ -81,7 +135,7 @@ public class CommandeGraphX {
 		jouerBouton.setBounds((fenetre.getWidth()-200)/2, fenetre.getHeight()-100, 200, 32);
 		ajoutEcouteurBoutonJouer(jouerBouton);
 				
-		// On ajoute les panel et les champs de texte
+		// On ajoute les panels et les champs de texte
 		fenetre.ajoutComposant(moutonPan);
 		fenetre.ajoutComposant(texte_nbM);
 		
@@ -101,19 +155,79 @@ public class CommandeGraphX {
 	
 	
 	/**
-	 *  Joue la partie
+	 *  Jouer la partie
 	 */
-	public void jouer(){
+	public void jouerPartie(){
 		
-		ctrl.evoluerUnivers();
+		chargement();
+		//ctrl.jouer();
+	}
+	
+	/**
+	 * Charge toutes les données nécessaires à l'éxecution de la partie
+	 */
+	private void chargement(){
+		//TODO Faire le chargement
+		
+		Fenetre telescripteur = new Fenetre(600, 100, 600, 200);
+		
+		JMenuBar barre = new JMenuBar();
+		JButton boutonQuit = new JButton("Quitter");
+		JButton boutonPause = new JButton("Pause/Continuer");
+		
+		
+		//Ajouts des ActionListeners
+		boutonQuit.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Fermer la fenetre
+				CommandeGraphX.this.fenetre.dispose();
+				System.exit(0);
+			}
+		});
+		
+		// On ajoute les boutons dans la barre
+		barre.add(boutonQuit);
+		barre.add(boutonPause);
+		telescripteur.setJMenuBar(barre);
+
+		// On met en place la fenêtre de telescripteur
+		telescripteur.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		telescripteur.setTitle("Evolution - Telescripteur");
+		telescripteur.setResizable(true);
+		//telescripteur.setLayout(null);
+		
+		telescripteur.revalidate();
+		telescripteur.repaint();
+		
+		VueTelescripteur.setTelescripteur(telescripteur);
+		
+		telescripteur.setVisible(true);
+
+		// On purge la fenêtre principale
+		fenetre.getContentPane().removeAll();
+		fenetre.setLayout(null);
+		fenetre.getContentPane().setBackground(new Color(0,0,0));
+
+		// Creer les sprites
+		
+		
+		
+		fenetre.revalidate();
+		fenetre.repaint();
+
 	}
 	
 	
+	
 	/**
-	 * Ajoute met un écouteur du bouton mis en paramètre
+	 * 
+	 * Ajoute un écouteur du bouton mis en paramètre
 	 * 
 	 * @param bouton Le Jbutton à écouter
-	 * @exception NullPointerException Si le paramètre est null
+	 * @exception NullPointerException Si le paramètre est null (ne devrait pas arriver)
+	 * 
 	 */
 	private void ajoutEcouteurBoutonJouer(JButton bouton){
 		
@@ -121,12 +235,11 @@ public class CommandeGraphX {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+
 				int nbM = 0,nbL = 0, largeur = 0, hauteur = 0;
 
-
 				try{
-					
+					// On récupère les valeur saisies dans les champs textes
 					nbM = Integer.parseInt(texte_nbM.getText());
 					nbL = Integer.parseInt(texte_nbL.getText());
 					largeur = Integer.parseInt(texte_l.getText());
@@ -136,22 +249,22 @@ public class CommandeGraphX {
 					
 					CommandeGraphX.this.ctrl.construireUnivers(new Univers(largeur, hauteur, nbM, nbL));
 					
-					CommandeGraphX.this.jouer();
 					
-				}catch(NumberFormatException e1){
-					
+				}catch(NumberFormatException | ValeurNegativeException | DimensionNonValideException e1){
+					// Problème avec le parseInt, ou bien avec le constructeur de Univers
 					erreurChampsInvalide();
 					e1.printStackTrace();
 
-				}catch(ValeurNegativeException e2){
+				}finally{
+				
+					// Si les valeurs définies sont correctes, OK
+					if( nbM >= 0 && nbL >= 0 && 
+							largeur >= Univers.UNIVERS_TAILLE_MIN && hauteur >= Univers.UNIVERS_TAILLE_MIN )
+					{
+						CommandeGraphX.this.fenetre.setSize(largeur*(Sprite.LARGEUR_SPRITE), hauteur*(Sprite.HAUTEUR_SPRITE));
+						CommandeGraphX.this.jouerPartie();
+					}	
 					
-					erreurChampsInvalide();
-					e2.printStackTrace();
-					
-				}catch(DimensionNonValideException e3){
-					
-					erreurChampsInvalide();
-					e3.printStackTrace();
 				}
 				
 			}
@@ -159,8 +272,12 @@ public class CommandeGraphX {
 		
 	}
 	
+	
 	/**
-	 * Créer une fenêtre d'erreur
+	 * 
+	 * Créer une fenêtre d'erreur pout indiquer
+	 * que la ou les saisie(s) est/sont invalide(s)
+	 * 
 	 */
 	private void erreurChampsInvalide(){
 		
@@ -169,7 +286,9 @@ public class CommandeGraphX {
 		JLabel label2 = new JLabel("Consignes : ");
 		JLabel label3 = new JLabel("Valeurs > 0");
 		JLabel label4 = new JLabel("Nombres d'animaux max : "+Integer.MAX_VALUE);
-		JLabel label5 = new JLabel("Dimension max univers : 50x50 ");
+		JLabel label5 = new JLabel("Dimension univers : "
+				+Univers.UNIVERS_TAILLE_MIN+"x"+Univers.UNIVERS_TAILLE_MIN+" -> "
+					+Univers.UNIVERS_TAILLE_MAX+"x"+Univers.UNIVERS_TAILLE_MAX+"");
 		
 		
 		label1.setBounds(0,0,300,32);

@@ -36,6 +36,9 @@ import exceptionUnivers.ValeurNegativeException;
  */
 public class Univers implements Observable {
 
+	public final static int UNIVERS_TAILLE_MIN = 8;
+	public final static int UNIVERS_TAILLE_MAX = 26;
+	
 	private int largeur; 	// largeur de l'univers, 999 max
 	private int hauteur;	// hauteur de l'univers, 26 max
 
@@ -52,10 +55,10 @@ public class Univers implements Observable {
 	public Univers(int l, int h, int nbMouton, int nbLoup) 
 		throws ValeurNegativeException, DimensionNonValideException{
 
-		if(l < 0 || l > 999)
+		if(l < UNIVERS_TAILLE_MIN || l > UNIVERS_TAILLE_MAX)
 			throw new DimensionNonValideException("Largeur invalide : "+l+" !");
 		
-		if(h < 0 || h > 26)
+		if(h < UNIVERS_TAILLE_MIN || h > UNIVERS_TAILLE_MAX)
 			throw new DimensionNonValideException("Hauteur invalide : "+h+" !");
 
 		if(nbMouton < 0 || nbLoup < 0)

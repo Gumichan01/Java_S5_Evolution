@@ -11,8 +11,8 @@ import javax.swing.JPanel;
 public class Sprite extends JPanel{
 
 
-	private final int LARGEUR_SPRITE = 32;
-	private final int HAUTEUR_SPRITE = 32;
+	public final static int LARGEUR_SPRITE = 32;
+	public final static int HAUTEUR_SPRITE = 32;
 	
 	private int x,y;
 	private BufferedImage image;

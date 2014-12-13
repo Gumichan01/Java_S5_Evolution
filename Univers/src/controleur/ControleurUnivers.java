@@ -40,7 +40,7 @@ public class ControleurUnivers implements ActionListener{
 		
 	}
 	
-	public void evoluerUnivers(){
+	public void jouer(){
 		
 		while(univers.nbAnimaux() > 0){
 
@@ -74,7 +74,7 @@ public class ControleurUnivers implements ActionListener{
 			enPause = true;
 		}
 		else if(enPause){
-			// TODO remettre l'univers là pù il s'est arrêté
+			// TODO remettre l'univers là où il s'est arrêté
 			enPause = false;
 		}
 		
@@ -89,7 +89,7 @@ public class ControleurUnivers implements ActionListener{
 	@Override
 
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		// TODO Gérer les action sur les différants boutons
 		throw new UnsupportedOperationException("TODO : Mettre l'univers en pause et continuer");
 	}
 	

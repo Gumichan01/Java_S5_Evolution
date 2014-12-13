@@ -17,7 +17,7 @@ public class ObsSelMineraux extends Vue_console implements Observateur{
 	
 	@Override
 	public void notifier() {
-		// TODO Auto-generated method stub
+
 		char ligne = (char) ('A' + selMineralObservable.getRect().y);
 		int colonne = selMineralObservable.getRect().x +1;
 		

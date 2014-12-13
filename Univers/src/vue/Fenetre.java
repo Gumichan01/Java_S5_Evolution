@@ -9,41 +9,25 @@ import javax.swing.JFrame;
 
 
 public class Fenetre extends JFrame{
-
-	private Container conteneur;
 	
-	public Fenetre(){
+	public Fenetre(int x,int y, int w, int h){
 		
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);	// fin programme après fermeture de la fenetre
-		this.setTitle("Evolution - Projet Java");		// On met le titre
-		this.setBounds(200, 200,800, 600);				// On definit la taille
+		this.setBounds(x,y,w,h);				// On definit la taille
 		
-		this.conteneur =  this.getContentPane();
-		this.conteneur.setLayout(null);
+		this.getContentPane().setLayout(null);
 		
 		this.setResizable(false);
 		
-		this.setVisible(true);							// On le rend visible
 	}
 	
 	
-	
-	public void afficherMenu(){
-		
-
-		
-	}
-	
-	
-	public void afficherJeu(){
-		
-		// TODO afficher plateau ...
-		
-	}
-	
+	/**
+	 *  Ajoute un composant dans la fenetre
+	 * @param comp le composant
+	 */
 	public void ajoutComposant(Component comp){
 		
-		this.conteneur.add(comp);
+		this.getContentPane().add(comp);
 	}
 	
 	
