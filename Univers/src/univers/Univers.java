@@ -200,16 +200,6 @@ public class Univers implements Observable {
 
 
 	public void evoluer(){
-
-
-		/*try{	// On laisse s'écouler 1 seconde entre chaque tour
-				// On le baissera sans doute à 500 millisecondes pour un grand nombre d'éléments
-			Thread.sleep(1000);
-			
-		}catch(InterruptedException e){
-			
-			e.printStackTrace();
-		}*/
 	
 		tour++;
 	
@@ -227,7 +217,7 @@ public class Univers implements Observable {
 	
 		// Appel de la vue (l'observateur)
 		this.notifierObs();
-
+		
 	}
 
 	private void recupererNouvMatieres(){
@@ -242,18 +232,6 @@ public class Univers implements Observable {
 					if( tmp instanceof SelMineral || tmp instanceof Animal)
 						ajouter(tmp);
 				}
-
-				// On récupère les sels minéraux
-				/*if(tmp instanceof SelMineral && !this.matieres.contains(tmp))
-					ajouter(tmp);
-				else if(tmp instanceof Animal && !this.matieres.contains(tmp)){ 
-					
-					// On a un nouvel animal qui vient de naitre;
-					if(Debug.DEBUG_UNIVERS)
-						System.out.println("DEBUG : Un animal vient de naitre ");
-					
-					this.matieres.add(tmp);
-				}*/
 
 			}	
 		}
@@ -314,12 +292,12 @@ public class Univers implements Observable {
 	
 	public int getLargeur(){
 		
-		return largeur;
+		return this.largeur;
 	}
 	
 	public int getHauteur(){
 		
-		return hauteur;
+		return this.hauteur;
 	}
 	
 	public ArrayList<Matiere> getMatieres(){

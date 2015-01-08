@@ -1,22 +1,25 @@
 package controleur;
 
 
+import java.awt.Adjustable;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
 
 
-import javax.imageio.ImageIO;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 
 import exceptionUnivers.DimensionNonValideException;
 import exceptionUnivers.ValeurNegativeException;
@@ -24,6 +27,7 @@ import exceptionUnivers.ValeurNegativeException;
 import univers.Univers;
 import vue.Fenetre;
 import vue.Sprite;
+import vue.Telescripteur;
 import vue.VueJeu;
 import vue.VueTelescripteur;
 
@@ -34,11 +38,12 @@ public class CommandeGraphX {
 	public final static String GRAPHX_QUITTER = "Q";
 	public final static String GRAPHX_PAUSE = "P";
 	
-	
-	
+	private static String[][] grille;
+	private static ArrayList<String> text_list;
 	
 	ControleurUnivers ctrl;
-	Fenetre fenetre;
+	private static Fenetre fenetre;
+	private static Telescripteur telescripteur;
 	VueJeu vueJeu;
 	Thread threadJeu;
 	
@@ -54,7 +59,7 @@ public class CommandeGraphX {
 
 
 	/**
-	 *  Cronstruit le controleur de l'univers et la fenetre
+	 *  Cronstruit le contrôleur de l'univers et la fenetre
 	 */
 	public CommandeGraphX(){
 
@@ -62,6 +67,8 @@ public class CommandeGraphX {
 		fenetre = new Fenetre(200, 200,800, 600);
 		fenetre.setTitle("Evolution - Projet Java");
 		fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		text_list = new ArrayList<String>();
 
 		fenetre.setVisible(true);
 	}
@@ -75,36 +82,7 @@ public class CommandeGraphX {
 	 * @return l'image qui a été mise en mémoire tampon
 	 * 
 	 */
-	public BufferedImage chargerImage(String cheminFichier){
-		
-		BufferedImage buf = null;
-		
-		try{
 
-			if(cheminFichier == null)	// Le chemin est invalide
-				throw new NullPointerException("Fichier non renseigné");
-			
-			buf = ImageIO.read(new File(cheminFichier));	// On essaie de lire le fichier
-			
-		}catch(NullPointerException ne){
-			
-			// Le paramètre est null
-			ne.printStackTrace();
-			throw ne;
-			
-		}
-		catch(IOException io){
-			
-			// On arrive pas à lire le fichier
-			io.printStackTrace();
-			throw new RuntimeException(io);
-			
-		}
-	
-		return buf;	// Il y a eu un problème si on est arrivé là
-		
-		
-	}
 	
 	
 	/**
@@ -158,7 +136,7 @@ public class CommandeGraphX {
 		fenetre.ajoutComposant(jouerBouton);
 		
 		fenetre.revalidate();
-		fenetre.repaint();	
+		fenetre.repaint();
 	}
 	
 	
@@ -168,18 +146,25 @@ public class CommandeGraphX {
 	public void jouerPartie(){
 		
 		chargement();
+		
+		//vueJeu = new VueJeu(fenetre);
+		
 		threadJeu = ctrl.new Jeu();
 		threadJeu.start();
 
+
+		
 	}
-	
+
 	/**
+	 * 
 	 * Charge toutes les données nécessaires à l'éxecution de la partie
+	 * 
 	 */
 	private void chargement(){
 
-		
-		final Fenetre telescripteur = new Fenetre(600, 100, 600, 200);
+
+		telescripteur = new Telescripteur(600, 100, 400, 200);
 		
 		JMenuBar barre = new JMenuBar();
 		JButton boutonQuit = new JButton("Quitter");
@@ -194,8 +179,8 @@ public class CommandeGraphX {
 			// L'écouteur pour quitter le programme 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				CommandeGraphX.this.fenetre.dispose();
+
+				CommandeGraphX.fenetre.dispose();
 				telescripteur.dispose();
 				System.exit(0);
 			}
@@ -212,23 +197,22 @@ public class CommandeGraphX {
 		telescripteur.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		telescripteur.setTitle("Evolution - Telescripteur");
 		telescripteur.setResizable(true);
-		//telescripteur.setLayout(null);
+		telescripteur.setLayout(new FlowLayout());
+		
+		telescripteur.lancerTimer();
 		
 		telescripteur.revalidate();
 		telescripteur.repaint();
-		
-		VueTelescripteur.setTelescripteur(telescripteur);
 		
 		telescripteur.setVisible(true);
 
 		// On purge la fenêtre principale
 		fenetre.getContentPane().removeAll();
-		fenetre.setLayout(null);
-		fenetre.getContentPane().setBackground(new Color(0,0,0));
 
+		
 		// Creer les sprites
 		
-		
+		fenetre.lancerTimer();
 		
 		fenetre.revalidate();
 		fenetre.repaint();
@@ -236,8 +220,36 @@ public class CommandeGraphX {
 	}
 	
 	
+	public static synchronized void recupererGrille(String [][] g){
+		
+		grille = g;
+	}
 	
-	/**
+	public static synchronized String [][] getGrille(){
+		
+		return grille;
+	}
+	
+	
+	public static synchronized void recupererTexte(String t){
+		
+		if(t != null)
+			text_list.add(t);
+	}
+	
+	public static synchronized void clearList(){
+		
+		text_list.clear();
+	}
+
+	public static synchronized ArrayList<String> getListOfText(){
+		
+		return text_list;
+	}
+	
+	
+	
+ 	/**
 	 * 
 	 * Ajoute un écouteur du bouton mis en paramètre
 	 * 
@@ -245,7 +257,7 @@ public class CommandeGraphX {
 	 * @exception NullPointerException Si le paramètre est null (ne devrait pas arriver)
 	 * 
 	 */
-	private void ajoutEcouteurBoutonJouer(JButton bouton){
+ 	private void ajoutEcouteurBoutonJouer(JButton bouton){
 		
 		bouton.addActionListener(new ActionListener() {
 			
@@ -277,7 +289,9 @@ public class CommandeGraphX {
 					if( nbM >= 0 && nbL >= 0 && 
 							largeur >= Univers.UNIVERS_TAILLE_MIN && hauteur >= Univers.UNIVERS_TAILLE_MIN )
 					{
-						CommandeGraphX.this.fenetre.setSize(largeur*(Sprite.LARGEUR_SPRITE), hauteur*(Sprite.HAUTEUR_SPRITE));
+						CommandeGraphX.fenetre.setSize(largeur*(Sprite.LARGEUR_SPRITE), hauteur*(Sprite.HAUTEUR_SPRITE));
+						CommandeGraphX.fenetre.setLignes(hauteur);
+						CommandeGraphX.fenetre.setColonnes(largeur);
 						CommandeGraphX.this.jouerPartie();
 					}	
 					
@@ -287,7 +301,17 @@ public class CommandeGraphX {
 		});
 		
 	}
+
 	
+	public static Fenetre getFrame(){
+		
+		return fenetre;
+	}
+	
+	public static Telescripteur getTelescripteur(){
+		
+		return telescripteur;
+	}
 	
 	/**
 	 * 
@@ -305,30 +329,30 @@ public class CommandeGraphX {
 		JLabel label5 = new JLabel("Dimension univers : "
 				+Univers.UNIVERS_TAILLE_MIN+"x"+Univers.UNIVERS_TAILLE_MIN+" -> "
 					+Univers.UNIVERS_TAILLE_MAX+"x"+Univers.UNIVERS_TAILLE_MAX+"");
-		
-		
+
+
 		label1.setBounds(0,0,300,32);
 		label2.setBounds(0, 32, 300, 32);
 		label3.setBounds(0, 64, 300, 32);
 		label4.setBounds(0, 96, 300, 32);
 		label5.setBounds(0, 128, 300, 32);
-		
+
 		frame.setTitle("ERREUR SAISIE");
 		frame.setBounds(300, 400, 300, 192);
-		
+
 		frame.getContentPane().setLayout(new GridLayout(5, 0));
 		frame.getContentPane().add(label1);
 		frame.getContentPane().add(label2);
 		frame.getContentPane().add(label3);
 		frame.getContentPane().add(label4);
 		frame.getContentPane().add(label5);
-		
+
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		
+
 		frame.setVisible(true);
 
 	}
-	
+
 }
 
 

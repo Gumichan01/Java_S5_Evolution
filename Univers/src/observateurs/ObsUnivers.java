@@ -2,11 +2,12 @@ package observateurs;
 
 import univers.Case;
 import univers.Univers;
+import vue.VueJeu;
 import vue.Vue_console;
 
 
 
-public class ObsUnivers extends Vue_console implements Observateur{
+public class ObsUnivers extends VueJeu implements Observateur{
 
 	Univers universObservable;
 	

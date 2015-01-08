@@ -72,7 +72,7 @@ public class Loup extends Animal implements Carnivore{
 
 		if(this.estVivant){
 
-			Rectangle r = this.voisinAProximiteDans(env);	//
+			Rectangle r = this.voisinAProximiteDans(env);	
 
 			if( r != null && env[r.x][r.y].getMatierDansCase() instanceof Mouton){
 
@@ -111,11 +111,11 @@ public class Loup extends Animal implements Carnivore{
 
 							// Qui va faire la gestation
 							if(this.sexe == Sexe.Femelle){
-								
+
 								this.placerPetitDans(this.seReproduire(partenaire),env);
 							}
 							else{
-								// C'est forcément le loup partenaire car il n'est pas du même sexe que le mouton courant
+								// C'est forcément le loup partenaire car il n'est pas du même sexe que l'autre
 								partenaire.placerPetitDans(partenaire.seReproduire(this),env);
 							}
 
@@ -127,13 +127,12 @@ public class Loup extends Animal implements Carnivore{
 					}
 
 				}
-				
+
 			}
-			else{
-				
-				if(!this.meurtVieillesse && !this.meurtFaim && !enReproduction)
-					super.evoluerDans(env);
-			}
+
+			if(!this.meurtVieillesse && !this.meurtFaim && !enReproduction)
+				super.evoluerDans(env);
+
 		}
 		else{
 			

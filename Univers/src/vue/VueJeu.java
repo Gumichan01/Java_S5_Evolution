@@ -1,41 +1,29 @@
 package vue;
 
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+import controleur.CommandeGraphX;
+
 public class VueJeu implements Vue{
 
-	protected static Fenetre fenetreJeu;
 	
-	
-	public VueJeu(){}
-	
-	/**
-	 * On construit la Vue du jeu
-	 * 
-	 * @param fenetreJeu
-	 */
-	public VueJeu(Fenetre fenetreJeu){
-		
-		setFenetre(fenetreJeu);
+	public VueJeu(){
+		//imageLoup = chargerImage("image/AAA.jpeg");
 	}
-	
-	/**
-	 * Affecte une nouvelle fenêtre à la vue graphique
-	 * 
-	 * Si la fenêtre mise en paramètre est null ou que la classe a déjà une instance de {@link Fenetre}
-	 * alors il ne se passe rien
-	 * 
-	 * @param f La fenêtre
-	 */
-	private void setFenetre(Fenetre f){
-		
-		if(f != null && fenetreJeu == null)
-			fenetreJeu = f;
-	}
-	
+
 	
 	@Override
 	public void afficherGrille(String[][] g) {
 		// TODO Afficher la grille sur la fenêtre
-		
+
+		CommandeGraphX.getFrame().setMAJ(true);
+		CommandeGraphX.recupererGrille(g);
+
 	}
 
 	@Override

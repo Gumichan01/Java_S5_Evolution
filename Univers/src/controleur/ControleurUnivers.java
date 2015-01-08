@@ -2,12 +2,20 @@ package controleur;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.lang.model.type.NullType;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
+
+import modele.Matiere;
 
 import univers.Univers;
 
 public class ControleurUnivers implements ActionListener{
 
-	private Univers univers;
+	Univers univers;
 	private boolean enPause = false;
 
 
@@ -62,8 +70,9 @@ public class ControleurUnivers implements ActionListener{
 	}
 	
 	
+	
 	/**
-	 * Mets en pause l'univers ou poursuit le jeu
+	 * Mets en pause l'univers ou poursuivre le jeu
 	 * 
 	 */
 	public void pauseUnivers(){
@@ -79,6 +88,7 @@ public class ControleurUnivers implements ActionListener{
 		
 	}
 
+	
 	/**
 	 * 
 	 * @author luxon
@@ -101,11 +111,9 @@ public class ControleurUnivers implements ActionListener{
 	 * 
 	 */
 	@Override
-
 	public void actionPerformed(ActionEvent arg0) {
 
 			this.pauseUnivers();
-	}
-	
+	}	
 	
 }

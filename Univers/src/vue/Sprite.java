@@ -12,19 +12,22 @@ public class Sprite extends JPanel{
 
 
 	public final static int LARGEUR_SPRITE = 32;
-	public final static int HAUTEUR_SPRITE = 32;
+	public final static int HAUTEUR_SPRITE = 33;
 	
 	private int x,y;
 	private BufferedImage image;
 	
-	public Sprite(BufferedImage img){
+	public Sprite(BufferedImage img,int nx,int ny){
 		
 		if(img == null)
 				throw new RuntimeException("Image non valide");
 		
 		image = img;
+		x = nx;
+		y = ny;
 		
-		
+		setBounds(x, y, image.getWidth(), image.getHeight());
+		setDoubleBuffered(true);
 	}
 	
 	
@@ -33,9 +36,11 @@ public class Sprite extends JPanel{
 		
 		// Le code ci-dessous affiche l'image dans le JPanel.
         if (image != null) {
-            g.drawImage(image, 0, 0, this.image.getWidth(), this.image.getHeight(), this);	
-            // TODO |^| changer les |0,0| et mettre |x, y| � la place
+        	super.paintComponent(g);
+        	//System.out.println("VOILA "+x+" "+y+"  "+image.getWidth()+" "+image.getHeight());
+            g.drawImage(image, x, y, this.image.getWidth(), this.image.getHeight(), this);	
         }
+        
 	}
 	
 	
