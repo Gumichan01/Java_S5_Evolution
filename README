@@ -13,3 +13,15 @@ Licence :
 	- grass.png, par Hawkadium. Creative Commons BY 3.0 
 	- sheep.png, par brooss. Creative Commons BY 3.0
 	- wolf.png, par ScarlettFeather. Licence GPL 3.0
+
+
+Fonctionnalités réalisés:
+	
+	-Creation de l'univers.
+	-Ajout et gestion des animaux dans l'univers(reproduction, mort ...).
+	-Les moutons qui mangent l'herbes.
+	-Le depot des sels minéraux.
+	-Gestion de des différentes morts(naturel,famine et manger).
+	-La gestion des animaux en trop.
+	-Dévelloppement d'interface console puis l'interface graphique.
+	-Mise en pause de l'univers.
