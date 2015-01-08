@@ -2,6 +2,7 @@ package univers;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.LinkedList;
 //import java.util.LinkedList;
 
 import observateurs.ObsLoup;
@@ -50,7 +51,14 @@ public class Univers implements Observable {
 
 	private ArrayList<Matiere> matieres;	// La liste de matières qui évolueront (SelMineral, Animuax,...)
 	private ArrayList<Observateur> liste_observateurs;
-	//private LinkedList<Animal> file;		// La liste des animaux en trop
+	
+	private int nbMoutonEnTrop;
+	private int nbLoupEntrop;
+	
+	private int moutons;
+	private int loups;
+
+	private LinkedList<Animal> file;		// La liste des animaux en trop
 
 	public Univers(int l, int h, int nbMouton, int nbLoup) 
 		throws ValeurNegativeException, DimensionNonValideException{
@@ -63,22 +71,48 @@ public class Univers implements Observable {
 
 		if(nbMouton < 0 || nbLoup < 0)
 			throw new ValeurNegativeException("Nombre d'animaux invalide !");
+
 		
 		// TODO Luxon - Traiter le cas où on a trop d'animaux par rapport à la taille du plateau
-		if((nbMouton + nbLoup) > (l*h)){
+		/*if((nbMouton + nbLoup) > (l*h)){
 			// TODO Gérer le cas où j'ai plus de moutons que de loups et vice-versa
 			// TODO Combien de mouton dois-je mettre par rapport aux loups pour assurer l'equilibre et la perennité de l'univers ?
 			// TODO faire les tests lorsque l'implementation de nourriture et reproduction sera fait
 			throw new UnsupportedOperationException("TODO : Operation non supporté, traier le cas où on a trop d'animaux");
+		}*/
+		
+		if(nbMouton > (l*h)){
+			
+			moutons = (l*h) / 4;
+			nbMoutonEnTrop = (l*h) - moutons;
+		}
+		else{
+			
+			moutons = nbMouton;
+			nbMoutonEnTrop = 0;
+		}
+		
+		if(nbLoup > (l*h)){
+			
+			loups = (l*h) / 4;
+			nbLoupEntrop = (l*h) - loups;
+		}
+		else{
+			
+			loups = nbLoup;
+			nbLoupEntrop = 0;
 		}
 		
 		this.largeur = l;
 		this.hauteur = h;
 		
-		plateau = new Case[largeur][hauteur];	/** @deprecated Supprimer ça*/
+		plateau = new Case[largeur][hauteur];
 
 		matieres = new ArrayList<Matiere>();
 		matieres.ensureCapacity((this.largeur*this.hauteur)+1); // On définit une capacité min = (taille totale du plateau + 1)
+		
+		if(nbMoutonEnTrop + nbLoupEntrop > 0)
+			file = new LinkedList<Animal>();
 		
 		
 		liste_observateurs = new ArrayList<Observateur>();
@@ -112,7 +146,7 @@ public class Univers implements Observable {
 		Sexe s;
 
 		// On place les moutons
-		for(int i = 1; i <= nbMouton;i++){
+		for(int i = 1; i <= moutons;i++){
 
 			do{
 
@@ -147,7 +181,7 @@ public class Univers implements Observable {
 		}
 
 		// On place les loups
-		for(int i = 1; i <= nbLoup;i++){
+		for(int i = 1; i <= loups;i++){
 			
 			do{
 			
@@ -177,7 +211,72 @@ public class Univers implements Observable {
 
 				e.printStackTrace();
 			}
-		}		
+		}
+		
+		
+		// On met les animaux en trop
+		for(int i = 0; i < nbMoutonEnTrop; i++){
+			
+			do{
+
+			xAlea = (int)(Math.random()*this.largeur);
+			yAlea = (int)(Math.random()*this.hauteur);
+
+			}while(plateau[xAlea][yAlea].getMatierDansCase() != null);
+
+			//Selection aléatoire du sexe
+			select_sexe = (int)(Math.random()*2 +1);
+
+			if(select_sexe == 1)
+				s = Sexe.Male;
+			else
+				s = Sexe.Femelle;
+			
+
+			// Ajout de la nouvelle instance de l'animal dans l'ArrayList
+			try {
+
+				Mouton m = new Mouton(new Rectangle(xAlea, yAlea, Entite.WIDTH, Entite.HEIGHT), "M", 50, s, 5);
+				m.ajoutObservateur(new ObsMouton(m));
+		
+				file.addLast(m);
+
+			} catch (Exception e) {
+
+				e.printStackTrace();
+			}
+		}
+		
+		for(int i = 0; i < nbLoupEntrop; i++){
+			
+			do{
+				
+			xAlea = (int)(Math.random()*this.largeur);
+			yAlea = (int)(Math.random()*this.hauteur);
+
+			}while(plateau[xAlea][yAlea].getMatierDansCase() != null);
+			
+			//Selection aléatoire du sexe
+			select_sexe = (int)(Math.random()*2 +1);
+
+			if(select_sexe == 1)
+				s = Sexe.Male;
+			else
+				s = Sexe.Femelle;
+
+			// Ajout de la nouvelle instance de l'animal dans l'ArrayList
+			try {
+				
+				Loup loup = new Loup(new Rectangle(xAlea, yAlea, Entite.WIDTH, Entite.HEIGHT),"L", 60, s, 10); 
+				loup.ajoutObservateur(new ObsLoup(loup));
+				
+				file.addLast(loup);
+				
+			} catch (Exception e) {
+
+				e.printStackTrace();
+			}
+		}
 		
 	}
 
@@ -214,6 +313,13 @@ public class Univers implements Observable {
 		this.supprimerMorts();	// On supprime les morts
 		
 		// TODO tester si une case se libère, pour mettre les animaux en trop
+		if(this.nbAnimaux() < (this.largeur * this.hauteur)){
+			
+			if(file != null && !file.isEmpty()){
+				
+				this.ajouter(file.pollFirst());
+			}
+		}
 	
 		// Appel de la vue (l'observateur)
 		this.notifierObs();
