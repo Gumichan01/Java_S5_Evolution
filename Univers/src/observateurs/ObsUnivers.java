@@ -1,6 +1,7 @@
 package observateurs;
 
 import univers.Case;
+import univers.Nourriture;
 import univers.Univers;
 import vue.VueJeu;
 import vue.Vue_console;
@@ -29,7 +30,10 @@ public class ObsUnivers extends VueJeu implements Observateur{
 			{
 				if(plateau[c][l].getMatierDansCase() == null){
 					
-					grille[c][l] = " ";
+					if(plateau[c][l].getNourriture() == Nourriture.Rien)
+						grille[c][l] = "V";
+					else
+						grille[c][l] = " ";
 				}
 				else{
 					

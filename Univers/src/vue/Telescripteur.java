@@ -29,7 +29,7 @@ public class Telescripteur extends Fenetre{
 		super(x, y, w, h);
 
 		majT = false;
-		
+
 		//lpane = new JLayeredPane();
 		
 		panel = new JPanel();

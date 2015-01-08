@@ -32,6 +32,7 @@ public class Fenetre extends JFrame implements ActionListener{
 	private static BufferedImage imageMouton;
 	private static BufferedImage imageHerbe;
 	private static BufferedImage imageSel;
+	private static BufferedImage imageVide;
 	
 	public Fenetre(int x,int y, int w, int h){
 		
@@ -44,6 +45,10 @@ public class Fenetre extends JFrame implements ActionListener{
 		mettreAJourJeu = true;
 		
 		imageLoup = chargerImage("image/wolf.png");
+		imageMouton = chargerImage("image/sheep.png");
+		imageHerbe = chargerImage("image/grass.png");
+		imageSel = chargerImage("image/sel.png");
+		imageVide = chargerImage("image/vide.png");
 	}
 	
 	private BufferedImage chargerImage(String cheminFichier){
@@ -150,12 +155,26 @@ public class Fenetre extends JFrame implements ActionListener{
 						this.getContentPane().add(new Sprite(imageLoup, 0, 0));
 						
 					}
+					else if(g[x][y].equalsIgnoreCase("M")){
+						
+						this.getContentPane().add(new Sprite(imageMouton, 0, 0));
+					}
+					else if(g[x][y].equalsIgnoreCase("S")){
+						
+						this.getContentPane().add(new Sprite(imageSel, 0, 0));
+					}
 					else{
 						JPanel p = new JPanel();
 						p.setBounds(0,0,32,33);
 						p.setVisible(true);
-						p.setBackground(new Color(255, 0, 0));
-						this.getContentPane().add(p);
+						
+						if(g[x][y].equalsIgnoreCase("V"))
+							this.getContentPane().add(new Sprite(imageVide, 0, 0));
+						else
+							this.getContentPane().add(new Sprite(imageHerbe, 0, 0));
+						
+						//p.setBackground(new Color(255, 0, 0));
+						//this.getContentPane().add(p);
 					}
 				}
 			}

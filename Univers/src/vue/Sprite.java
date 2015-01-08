@@ -12,7 +12,7 @@ public class Sprite extends JPanel{
 
 
 	public final static int LARGEUR_SPRITE = 32;
-	public final static int HAUTEUR_SPRITE = 33;
+	public final static int HAUTEUR_SPRITE = 32;
 	
 	private int x,y;
 	private BufferedImage image;
