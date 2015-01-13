@@ -4,7 +4,6 @@ import univers.Case;
 import univers.Nourriture;
 import univers.Univers;
 import vue.VueJeu;
-import vue.Vue_console;
 
 
 

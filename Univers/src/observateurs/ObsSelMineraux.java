@@ -2,7 +2,6 @@ package observateurs;
 
 import vue.Vue;
 import vue.VueTelescripteur;
-import vue.Vue_console;
 import modele.SelMineral;
 
 public class ObsSelMineraux extends VueTelescripteur implements Observateur{

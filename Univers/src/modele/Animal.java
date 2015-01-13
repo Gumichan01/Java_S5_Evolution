@@ -327,7 +327,6 @@ public abstract class Animal extends Matiere{
 	 * @param dy Le déplacement en Y
 	 * @param env L'environnement dans lequel on évolue
 	 * 
-	 * TODO gérer les deplacements en diagonal
 	 */
 	private void seDeplacer(int dx, int dy, Case [][] env){
 		

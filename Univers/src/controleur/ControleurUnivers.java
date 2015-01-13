@@ -20,24 +20,9 @@ public class ControleurUnivers implements ActionListener{
 
 
 	public ControleurUnivers(){}
-	
-	/**
-	 * 
-	 * @param u
-	 */
-	public ControleurUnivers(Univers u) {
-	
-		if(u == null)
-				throw new NullPointerException("Echec lors de la création du contrôleur de l'univers : Univers inexistant !!");
-		
-		univers = u;
-		
-	}
 
-	/**
-	 * 
-	 * @param u
-	 */
+
+
 	public void construireUnivers(Univers u){
 		
 		if(u == null)

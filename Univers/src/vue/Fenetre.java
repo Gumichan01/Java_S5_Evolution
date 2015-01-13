@@ -1,10 +1,8 @@
 package vue;
 
-import java.awt.Color;
+
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.GridLayout;
-import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -128,7 +126,7 @@ public class Fenetre extends JFrame implements ActionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+
 		
 		String [][] g = CommandeGraphX.getGrille();
 		
@@ -140,11 +138,6 @@ public class Fenetre extends JFrame implements ActionListener{
 
 			this.getContentPane().removeAll();
 			this.getContentPane().setLayout(new GridLayout(lignes, colonnes));
-			
-			
-			//System.out.println("nombre de composants : "+this.getContentPane().getComponentCount());
-			//System.out.println("Dim fenetre" + this.getWidth()+" * "+this.getHeight());
-			//System.out.println("Dim imageLoup "+imageLoup.getWidth()+" * "+imageLoup.getHeight());
 			
 			for(int x = 0;x < g.length; x++){
 				

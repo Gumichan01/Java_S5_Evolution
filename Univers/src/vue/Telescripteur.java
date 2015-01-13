@@ -3,15 +3,12 @@ package vue;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
-
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
 import javax.swing.Timer;
 
 import controleur.CommandeGraphX;

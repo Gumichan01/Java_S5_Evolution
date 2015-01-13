@@ -20,7 +20,7 @@ public class Main {
 	 * @param args Les paramètres positionnels ne servent à rien 
 	 */
 	public static void main(String[] args){
-		// TODO Finir les autres @TODO avant de faire l'interface graphique
+
 		
 	if(Debug.DEBUG_UNIVERS)
 		System.out.println("Création de l'Univers");

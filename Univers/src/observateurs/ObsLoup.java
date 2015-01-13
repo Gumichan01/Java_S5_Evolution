@@ -1,12 +1,11 @@
 package observateurs;
 
 
-import vue.VueTelescripteur;
 import vue.Vue_console;
 import modele.Loup;
 import modele.Mort;
 
-public class ObsLoup extends VueTelescripteur implements Observateur{
+public class ObsLoup extends Vue_console implements Observateur{
 
 	Loup loupObservable;
 	

@@ -1,12 +1,11 @@
 package observateurs;
 
 
-import vue.VueTelescripteur;
 import vue.Vue_console;
 import modele.Mort;
 import modele.Mouton;
 
-public class ObsMouton extends VueTelescripteur implements Observateur{
+public class ObsMouton extends Vue_console implements Observateur{
 
 	
 	Mouton moutonObservable;

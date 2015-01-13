@@ -24,6 +24,9 @@ import exceptionUnivers.ValeurNegativeException;
 
 
 /**
+ * 
+ * @class Univers
+ * 
  * La classe Univers représente le modèle principal dans le jeu
  * Il contient les différentes entités, mais aussi le plateau
  * 
@@ -72,14 +75,6 @@ public class Univers implements Observable {
 		if(nbMouton < 0 || nbLoup < 0)
 			throw new ValeurNegativeException("Nombre d'animaux invalide !");
 
-		
-		// TODO Luxon - Traiter le cas où on a trop d'animaux par rapport à la taille du plateau
-		/*if((nbMouton + nbLoup) > (l*h)){
-			// TODO Gérer le cas où j'ai plus de moutons que de loups et vice-versa
-			// TODO Combien de mouton dois-je mettre par rapport aux loups pour assurer l'equilibre et la perennité de l'univers ?
-			// TODO faire les tests lorsque l'implementation de nourriture et reproduction sera fait
-			throw new UnsupportedOperationException("TODO : Operation non supporté, traier le cas où on a trop d'animaux");
-		}*/
 		
 		if(nbMouton > (l*h)){
 			
@@ -297,7 +292,9 @@ public class Univers implements Observable {
 		
 	}
 
-
+	/**
+	 * Fait evoluer l'univers
+	 */
 	public void evoluer(){
 	
 		tour++;
@@ -312,7 +309,6 @@ public class Univers implements Observable {
 		this.recupererNouvMatieres();
 		this.supprimerMorts();	// On supprime les morts
 		
-		// TODO tester si une case se libère, pour mettre les animaux en trop
 		if(this.nbAnimaux() < (this.largeur * this.hauteur)){
 			
 			if(file != null && !file.isEmpty()){

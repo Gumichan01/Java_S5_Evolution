@@ -3,7 +3,6 @@ package modele;
 import java.awt.Rectangle;
 
 import observateurs.ObsLoup;
-import observateurs.ObsMouton;
 import observateurs.ObsSelMineraux;
 
 import univers.Case;

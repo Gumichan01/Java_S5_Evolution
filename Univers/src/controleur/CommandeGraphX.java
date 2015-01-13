@@ -1,8 +1,6 @@
 package controleur;
 
 
-import java.awt.Adjustable;
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -16,10 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.Timer;
 
 import exceptionUnivers.DimensionNonValideException;
 import exceptionUnivers.ValeurNegativeException;
@@ -29,10 +24,16 @@ import vue.Fenetre;
 import vue.Sprite;
 import vue.Telescripteur;
 import vue.VueJeu;
-import vue.VueTelescripteur;
 
 
-
+/**
+ * @class CommandeGraphX
+ * 
+ * Effectue les commandes sur la fenetre
+ * 
+ * @author luxon
+ *
+ */
 public class CommandeGraphX {
 
 	public final static String GRAPHX_QUITTER = "Q";
@@ -283,41 +284,46 @@ public class CommandeGraphX {
 					erreurChampsInvalide();
 					e1.printStackTrace();
 
-				}finally{
+				}
 				
-					// Si les valeurs définies sont correctes, OK
-					if( nbM >= 0 && nbL >= 0 && 
-							largeur >= Univers.UNIVERS_TAILLE_MIN && hauteur >= Univers.UNIVERS_TAILLE_MIN )
-					{
-						CommandeGraphX.fenetre.setSize(largeur*(Sprite.LARGEUR_SPRITE), hauteur*(Sprite.HAUTEUR_SPRITE));
-						CommandeGraphX.fenetre.setLignes(hauteur);
-						CommandeGraphX.fenetre.setColonnes(largeur);
-						CommandeGraphX.this.jouerPartie();
-					}	
-					
+				// Si les valeurs définies sont correctes, OK
+				if( nbM >= 0 && nbL >= 0 && 
+						largeur >= Univers.UNIVERS_TAILLE_MIN && hauteur >= Univers.UNIVERS_TAILLE_MIN )
+				{
+					CommandeGraphX.fenetre.setSize(largeur*(Sprite.LARGEUR_SPRITE), hauteur*(Sprite.HAUTEUR_SPRITE));
+					CommandeGraphX.fenetre.setLignes(hauteur);
+					CommandeGraphX.fenetre.setColonnes(largeur);
+					CommandeGraphX.this.jouerPartie();
 				}
 				
 			}
-		});
+		}
+		);
 		
 	}
 
-	
+ 	/**
+ 	 *  Recupère la fenêtre de jeu
+ 	 * 	@return Fenetre la fenetre
+ 	 */
 	public static Fenetre getFrame(){
 		
 		return fenetre;
 	}
 	
+	/**
+	 *  Renvoie le telescripteur
+	 * @return telescripteur
+	 */
 	public static Telescripteur getTelescripteur(){
 		
 		return telescripteur;
 	}
 	
+
 	/**
-	 * 
 	 * Créer une fenêtre d'erreur pout indiquer
 	 * que la ou les saisie(s) est/sont invalide(s)
-	 * 
 	 */
 	private void erreurChampsInvalide(){
 		
